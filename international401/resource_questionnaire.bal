@@ -1,4 +1,4 @@
-// Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
 
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -21,6 +21,8 @@ import ballerinax/health.fhir.r4;
 
 public const string PROFILE_BASE_QUESTIONNAIRE = "http://hl7.org/fhir/StructureDefinition/Questionnaire";
 public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
+
+public type QuestionnaireExtensions (CqfTargetInvariant|DesignNote|r4:Extension|PreferredTerminologyServer|QuestionnaireConstraint|QuestionnaireDefinitionBased|QuestionnaireSignatureRequired|Replaces|TargetConstraint|Variable);
 
 # FHIR Questionnaire resource record.
 #
@@ -60,7 +62,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
     baseType: r4:DomainResource,
     profile: "http://hl7.org/fhir/StructureDefinition/Questionnaire",
     elements: {
-        "date" : {
+        "date": {
             name: "date",
             dataType: r4:dateTime,
             min: 0,
@@ -68,7 +70,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.date"
         },
-        "copyright" : {
+        "copyright": {
             name: "copyright",
             dataType: r4:markdown,
             min: 0,
@@ -76,7 +78,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.copyright"
         },
-        "extension" : {
+        "extension": {
             name: "extension",
             dataType: r4:Extension,
             min: 0,
@@ -84,7 +86,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: true,
             path: "Questionnaire.extension"
         },
-        "approvalDate" : {
+        "approvalDate": {
             name: "approvalDate",
             dataType: r4:date,
             min: 0,
@@ -92,7 +94,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.approvalDate"
         },
-        "code" : {
+        "code": {
             name: "code",
             dataType: r4:Coding,
             min: 0,
@@ -101,7 +103,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             path: "Questionnaire.code",
             valueSet: "http://hl7.org/fhir/ValueSet/questionnaire-questions"
         },
-        "purpose" : {
+        "purpose": {
             name: "purpose",
             dataType: r4:markdown,
             min: 0,
@@ -109,7 +111,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.purpose"
         },
-        "jurisdiction" : {
+        "jurisdiction": {
             name: "jurisdiction",
             dataType: r4:CodeableConcept,
             min: 0,
@@ -118,7 +120,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             path: "Questionnaire.jurisdiction",
             valueSet: "http://hl7.org/fhir/ValueSet/jurisdiction"
         },
-        "modifierExtension" : {
+        "modifierExtension": {
             name: "modifierExtension",
             dataType: r4:Extension,
             min: 0,
@@ -126,7 +128,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: true,
             path: "Questionnaire.modifierExtension"
         },
-        "description" : {
+        "description": {
             name: "description",
             dataType: r4:markdown,
             min: 0,
@@ -134,7 +136,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.description"
         },
-        "experimental" : {
+        "experimental": {
             name: "experimental",
             dataType: boolean,
             min: 0,
@@ -142,7 +144,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.experimental"
         },
-        "language" : {
+        "language": {
             name: "language",
             dataType: r4:code,
             min: 0,
@@ -151,7 +153,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             path: "Questionnaire.language",
             valueSet: "http://hl7.org/fhir/ValueSet/languages"
         },
-        "title" : {
+        "title": {
             name: "title",
             dataType: string,
             min: 0,
@@ -159,7 +161,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.title"
         },
-        "subjectType" : {
+        "subjectType": {
             name: "subjectType",
             dataType: r4:code,
             min: 0,
@@ -168,7 +170,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             path: "Questionnaire.subjectType",
             valueSet: "http://hl7.org/fhir/ValueSet/resource-types|4.0.1"
         },
-        "contact" : {
+        "contact": {
             name: "contact",
             dataType: r4:ContactDetail,
             min: 0,
@@ -176,7 +178,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: true,
             path: "Questionnaire.contact"
         },
-        "derivedFrom" : {
+        "derivedFrom": {
             name: "derivedFrom",
             dataType: r4:canonical,
             min: 0,
@@ -184,7 +186,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: true,
             path: "Questionnaire.derivedFrom"
         },
-        "id" : {
+        "id": {
             name: "id",
             dataType: string,
             min: 0,
@@ -192,7 +194,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.id"
         },
-        "text" : {
+        "text": {
             name: "text",
             dataType: r4:Narrative,
             min: 0,
@@ -200,7 +202,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.text"
         },
-        "identifier" : {
+        "identifier": {
             name: "identifier",
             dataType: r4:Identifier,
             min: 0,
@@ -208,7 +210,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: true,
             path: "Questionnaire.identifier"
         },
-        "item" : {
+        "item": {
             name: "item",
             dataType: QuestionnaireItem,
             min: 0,
@@ -216,7 +218,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: true,
             path: "Questionnaire.item"
         },
-        "effectivePeriod" : {
+        "effectivePeriod": {
             name: "effectivePeriod",
             dataType: r4:Period,
             min: 0,
@@ -224,7 +226,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.effectivePeriod"
         },
-        "version" : {
+        "version": {
             name: "version",
             dataType: string,
             min: 0,
@@ -232,7 +234,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.version"
         },
-        "url" : {
+        "url": {
             name: "url",
             dataType: r4:uri,
             min: 0,
@@ -240,7 +242,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.url"
         },
-        "contained" : {
+        "contained": {
             name: "contained",
             dataType: r4:Resource,
             min: 0,
@@ -248,7 +250,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: true,
             path: "Questionnaire.contained"
         },
-        "lastReviewDate" : {
+        "lastReviewDate": {
             name: "lastReviewDate",
             dataType: r4:date,
             min: 0,
@@ -256,7 +258,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.lastReviewDate"
         },
-        "meta" : {
+        "meta": {
             name: "meta",
             dataType: r4:Meta,
             min: 0,
@@ -264,7 +266,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.meta"
         },
-        "name" : {
+        "name": {
             name: "name",
             dataType: string,
             min: 0,
@@ -272,7 +274,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.name"
         },
-        "implicitRules" : {
+        "implicitRules": {
             name: "implicitRules",
             dataType: r4:uri,
             min: 0,
@@ -280,7 +282,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.implicitRules"
         },
-        "publisher" : {
+        "publisher": {
             name: "publisher",
             dataType: string,
             min: 0,
@@ -288,7 +290,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: false,
             path: "Questionnaire.publisher"
         },
-        "useContext" : {
+        "useContext": {
             name: "useContext",
             dataType: r4:UsageContext,
             min: 0,
@@ -296,7 +298,7 @@ public const RESOURCE_NAME_QUESTIONNAIRE = "Questionnaire";
             isArray: true,
             path: "Questionnaire.useContext"
         },
-        "status" : {
+        "status": {
             name: "status",
             dataType: QuestionnaireStatus,
             min: 1,
@@ -346,42 +348,63 @@ public type Questionnaire record {|
     string publisher?;
     r4:UsageContext[] useContext?;
     QuestionnaireStatus status;
-    r4:Element ...;
+    r4:Element...;
 |};
 
 # QuestionnaireItemEnableBehavior enum
 public enum QuestionnaireItemEnableBehavior {
-   CODE_ENABLEBEHAVIOR_ALL = "all",
-   CODE_ENABLEBEHAVIOR_ANY = "any"
+    CODE_ENABLEBEHAVIOR_ALL = "all",
+    CODE_ENABLEBEHAVIOR_ANY = "any"
 }
 
 # QuestionnaireItemType enum
 public enum QuestionnaireItemType {
-   CODE_TYPE_DATE = "date",
-   CODE_TYPE_DATETIME = "dateTime",
-   CODE_TYPE_BOOLEAN = "boolean",
-   CODE_TYPE_DISPLAY = "display",
-   CODE_TYPE_INTEGER = "integer",
-   CODE_TYPE_DECIMAL = "decimal",
-   CODE_TYPE_GROUP = "group"
+    CODE_TYPE_DATE = "date",
+    CODE_TYPE_DATETIME = "dateTime",
+    CODE_TYPE_BOOLEAN = "boolean",
+    CODE_TYPE_DISPLAY = "display",
+    CODE_TYPE_INTEGER = "integer",
+    CODE_TYPE_DECIMAL = "decimal",
+    CODE_TYPE_GROUP = "group",
+    CODE_TYPE_TIME = "time",
+    CODE_TYPE_STRING = "string",
+    CODE_TYPE_TEXT = "text",
+    CODE_TYPE_URL = "url",
+    CODE_TYPE_CHOICE = "choice",
+    CODE_TYPE_OPEN_CHOICE = "open-choice",
+    CODE_TYPE_ATTACHMENT = "attachment",
+    CODE_TYPE_REFERENCE = "reference",
+    CODE_TYPE_QUANTITY = "quantity",
+    CODE_TYPE_QUESTION = "question"
 }
 
 # FHIR QuestionnaireItemAnswerOption datatype record.
 #
+# + valueCoding - A potential answer that's allowed as the answer to this question.
 # + extension - May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-# + valueQuestionnaireCoding - A potential answer that's allowed as the answer to this question.
+# + valueTime - A potential answer that's allowed as the answer to this question.
+# + valueString - A potential answer that's allowed as the answer to this question.
+# + valueReference - A potential answer that's allowed as the answer to this question.
 # + initialSelected - Indicates whether the answer value is selected when the list of possible answers is initially shown.
 # + modifierExtension - May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
 # + id - Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-# + valueQuestionnaireInteger - A potential answer that's allowed as the answer to this question.
-# + valueQuestionnaireString - A potential answer that's allowed as the answer to this question.
-# + valueQuestionnaireDate - A potential answer that's allowed as the answer to this question.
-# + valueQuestionnaireTime - A potential answer that's allowed as the answer to this question.
-# + valueQuestionnaireReference - A potential answer that's allowed as the answer to this question.
+# + valueDate - A potential answer that's allowed as the answer to this question.
+# + valueInteger - A potential answer that's allowed as the answer to this question.
+
 @r4:DataTypeDefinition {
     name: "QuestionnaireItemAnswerOption",
     baseType: (),
     elements: {
+        "valueCoding": {
+            name: "valueCoding",
+            dataType: r4:Coding,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "A potential answer that's allowed as the answer to this question.",
+            path: "Questionnaire.item.answerOption.value[x]"
+        },
+
         "extension": {
             name: "extension",
             dataType: r4:Extension,
@@ -391,15 +414,37 @@ public enum QuestionnaireItemType {
             description: "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
             path: "Questionnaire.item.answerOption.extension"
         },
-        "valueQuestionnaireCoding": {
-            name: "valueQuestionnaireCoding",
-            dataType: r4:Coding,
-            min: 1,
+
+        "valueTime": {
+            name: "valueTime",
+            dataType: r4:time,
+            min: 0,
             max: 1,
             isArray: false,
             description: "A potential answer that's allowed as the answer to this question.",
             path: "Questionnaire.item.answerOption.value[x]"
         },
+
+        "valueString": {
+            name: "valueString",
+            dataType: string,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "A potential answer that's allowed as the answer to this question.",
+            path: "Questionnaire.item.answerOption.value[x]"
+        },
+
+        "valueReference": {
+            name: "valueReference",
+            dataType: r4:Reference,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "A potential answer that's allowed as the answer to this question.",
+            path: "Questionnaire.item.answerOption.value[x]"
+        },
+
         "initialSelected": {
             name: "initialSelected",
             dataType: boolean,
@@ -427,46 +472,21 @@ public enum QuestionnaireItemType {
             description: "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
             path: "Questionnaire.item.answerOption.id"
         },
-        "valueQuestionnaireInteger": {
-            name: "valueQuestionnaireInteger",
-            dataType: r4:integer,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "A potential answer that's allowed as the answer to this question.",
-            path: "Questionnaire.item.answerOption.value[x]"
-        },
-        "valueQuestionnaireString": {
-            name: "valueQuestionnaireString",
-            dataType: string,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "A potential answer that's allowed as the answer to this question.",
-            path: "Questionnaire.item.answerOption.value[x]"
-        },
-        "valueQuestionnaireDate": {
-            name: "valueQuestionnaireDate",
+
+        "valueDate": {
+            name: "valueDate",
             dataType: r4:date,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "A potential answer that's allowed as the answer to this question.",
             path: "Questionnaire.item.answerOption.value[x]"
         },
-        "valueQuestionnaireTime": {
-            name: "valueQuestionnaireTime",
-            dataType: r4:time,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "A potential answer that's allowed as the answer to this question.",
-            path: "Questionnaire.item.answerOption.value[x]"
-        },
-        "valueQuestionnaireReference": {
-            name: "valueQuestionnaireReference",
-            dataType: r4:Reference,
-            min: 1,
+
+        "valueInteger": {
+            name: "valueInteger",
+            dataType: r4:integer,
+            min: 0,
             max: 1,
             isArray: false,
             description: "A potential answer that's allowed as the answer to this question.",
@@ -481,38 +501,40 @@ public enum QuestionnaireItemType {
 public type QuestionnaireItemAnswerOption record {|
     *r4:BackboneElement;
 
+    r4:Coding valueCoding?;
     r4:Extension[] extension?;
-    r4:Coding valueQuestionnaireCoding;
+    r4:time valueTime?;
+    string valueString?;
+    r4:Reference valueReference?;
     boolean initialSelected?;
     r4:Extension[] modifierExtension?;
     string id?;
-    r4:integer valueQuestionnaireInteger;
-    string valueQuestionnaireString;
-    r4:date valueQuestionnaireDate;
-    r4:time valueQuestionnaireTime;
-    r4:Reference valueQuestionnaireReference;
+    r4:date valueDate?;
+    r4:integer valueInteger?;
 |};
 
 # FHIR QuestionnaireItem datatype record.
 #
-# + repeats - An indication, if true, that the item may occur multiple times in the response, collecting multiple answers for questions or multiple sets of answers for groups.
-# + extension - May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-# + code - A terminology code that corresponds to this group or question (e.g. a code from LOINC, which defines many questions and answers).
-# + enableWhen - A constraint indicating that this item should only be enabled (displayed/allow answers to be captured) when the specified condition is true.
-# + initial - One or more values that should be pre-populated in the answer when initially rendering the questionnaire for user input.
-# + prefix - A short label for a particular group, question or set of display text within the questionnaire used for reference by the individual completing the questionnaire.
-# + modifierExtension - May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-# + readOnly - An indication, when true, that the value cannot be changed by a human respondent to the Questionnaire.
-# + 'type - The type of questionnaire item this is - whether text for display, a grouping of other items or a particular type of data to be captured (string, integer, coded choice, etc.).
-# + required - An indication, if true, that the item must be present in a 'completed' QuestionnaireResponse. If false, the item may be skipped when answering the questionnaire.
-# + linkId - An identifier that is unique within the Questionnaire allowing linkage to the equivalent item in a QuestionnaireResponse resource.
-# + definition - This element is a URI that refers to an [ElementDefinition](elementdefinition.html) that provides information about this item, including information that might otherwise be included in the instance of the Questionnaire resource. A detailed description of the construction of the URI is shown in Comments, below. If this element is present then the following element values MAY be derived from the Element Definition if the corresponding elements of this Questionnaire resource instance have no value: * code (ElementDefinition.code) * type (ElementDefinition.type) * required (ElementDefinition.min) * repeats (ElementDefinition.max) * maxLength (ElementDefinition.maxLength) * answerValueSet (ElementDefinition.binding) * options (ElementDefinition.binding).
-# + enableBehavior - Controls how multiple enableWhen values are interpreted - whether all or any must be true.
-# + id - Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-# + text - The name of a section, the text of a question or text content for a display item.
-# + answerOption - One of the permitted answers for a 'choice' or 'open-choice' question.
-# + answerValueSet - A reference to a value set containing a list of codes representing permitted answers for a 'choice' or 'open-choice' question.
-# + maxLength - The maximum number of characters that are permitted in the answer to be considered a 'valid' QuestionnaireResponse.
+# + repeats - An indication, if true, that the item may occur multiple times in the response, collecting multiple answers for questions or multiple sets of answers for groups.  
+# + extension - May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.  
+# + item - Text, questions and other groups to be nested beneath a question or group.
+# + code - A terminology code that corresponds to this group or question (e.g. a code from LOINC, which defines many questions and answers).  
+# + enableWhen - A constraint indicating that this item should only be enabled (displayed/allow answers to be captured) when the specified condition is true.  
+# + initial - One or more values that should be pre-populated in the answer when initially rendering the questionnaire for user input.  
+# + prefix - A short label for a particular group, question or set of display text within the questionnaire used for reference by the individual completing the questionnaire.  
+# + modifierExtension - May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).  
+# + readOnly - An indication, when true, that the value cannot be changed by a human respondent to the Questionnaire.  
+# + 'type - The type of questionnaire item this is - whether text for display, a grouping of other items or a particular type of data to be captured (string, integer, coded choice, etc.).  
+# + required - An indication, if true, that the item must be present in a 'completed' QuestionnaireResponse. If false, the item may be skipped when answering the questionnaire.  
+# + linkId - An identifier that is unique within the Questionnaire allowing linkage to the equivalent item in a QuestionnaireResponse resource.  
+# + definition - This element is a URI that refers to an [ElementDefinition](elementdefinition.html) that provides information about this item, including information that might otherwise be included in the instance of the Questionnaire resource. A detailed description of the construction of the URI is shown in Comments, below. If this element is present then the following element values MAY be derived from the Element Definition if the corresponding elements of this Questionnaire resource instance have no value: * code (ElementDefinition.code) * type (ElementDefinition.type) * required (ElementDefinition.min) * repeats (ElementDefinition.max) * maxLength (ElementDefinition.maxLength) * answerValueSet (ElementDefinition.binding) * options (ElementDefinition.binding).  
+# + enableBehavior - Controls how multiple enableWhen values are interpreted - whether all or any must be true.  
+# + id - Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.  
+# + text - The name of a section, the text of a question or text content for a display item.  
+# + answerOption - One of the permitted answers for a 'choice' or 'open-choice' question.  
+# + answerValueSet - A reference to a value set containing a list of codes representing permitted answers for a 'choice' or 'open-choice' question.  
+# + maxLength - The maximum number of characters that are permitted in the answer to be considered a 'valid' QuestionnaireResponse.  
+
 @r4:DataTypeDefinition {
     name: "QuestionnaireItem",
     baseType: (),
@@ -535,6 +557,17 @@ public type QuestionnaireItemAnswerOption record {|
             description: "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
             path: "Questionnaire.item.extension"
         },
+
+        "item": {
+            name: "item",
+            dataType: QuestionnaireItem,
+            min: 0,
+            max: int:MAX_VALUE,
+            isArray: true,
+            description: "Text, questions and other groups to be nested beneath a question or group.",
+            path: "Questionnaire.item.item"
+        },
+
         "code": {
             name: "code",
             dataType: r4:Coding,
@@ -690,6 +723,7 @@ public type QuestionnaireItem record {|
 
     boolean repeats?;
     r4:Extension[] extension?;
+    QuestionnaireItem[] item?;
     r4:Coding[] code?;
     QuestionnaireItemEnableWhen[] enableWhen?;
     QuestionnaireItemInitial[] initial?;
@@ -710,44 +744,65 @@ public type QuestionnaireItem record {|
 
 # QuestionnaireStatus enum
 public enum QuestionnaireStatus {
-   CODE_STATUS_DRAFT = "draft",
-   CODE_STATUS_ACTIVE = "active",
-   CODE_STATUS_RETIRED = "retired",
-   CODE_STATUS_UNKNOWN = "unknown"
+    CODE_STATUS_DRAFT = "draft",
+    CODE_STATUS_ACTIVE = "active",
+    CODE_STATUS_RETIRED = "retired",
+    CODE_STATUS_UNKNOWN = "unknown"
 }
 
 # QuestionnaireItemEnableWhenOperator enum
 public enum QuestionnaireItemEnableWhenOperator {
-   CODE_OPERATOR_LESS_THAN_OR_EQUAL = "<=",
-   CODE_OPERATOR_EXISTS = "exists",
-   CODE_OPERATOR_NOT_EQUAL = "!=",
-   CODE_OPERATOR_LESS_THAN = "<",
-   CODE_OPERATOR_EQUAL = "=",
-   CODE_OPERATOR_GREATER_THAN = ">",
-   CODE_OPERATOR_GREATER_THAN_OR_EQUAL = ">="
+    CODE_OPERATOR_LESS_THAN_OR_EQUAL = "<=",
+    CODE_OPERATOR_EXISTS = "exists",
+    CODE_OPERATOR_NOT_EQUAL = "!=",
+    CODE_OPERATOR_LESS_THAN = "<",
+    CODE_OPERATOR_EQUAL = "=",
+    CODE_OPERATOR_GREATER_THAN = ">",
+    CODE_OPERATOR_GREATER_THAN_OR_EQUAL = ">="
 }
 
 # FHIR QuestionnaireItemInitial datatype record.
 #
+# + valueBoolean - The actual value to for an initial answer.
+# + valueCoding - The actual value to for an initial answer.
 # + extension - May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-# + valueQuestionnaireCoding - The actual value to for an initial answer.
+# + valueTime - The actual value to for an initial answer.
+# + valueReference - The actual value to for an initial answer.
 # + modifierExtension - May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-# + valueQuestionnaireUri - The actual value to for an initial answer.
-# + valueQuestionnaireBoolean - The actual value to for an initial answer.
-# + valueQuestionnaireAttachment - The actual value to for an initial answer.
-# + valueQuestionnaireReference - The actual value to for an initial answer.
-# + valueQuestionnaireDecimal - The actual value to for an initial answer.
-# + valueQuestionnaireDateTime - The actual value to for an initial answer.
-# + valueQuestionnaireQuantity - The actual value to for an initial answer.
+# + valueDecimal - The actual value to for an initial answer.
+# + valueUri - The actual value to for an initial answer.
+# + valueDate - The actual value to for an initial answer.
+# + valueAttachment - The actual value to for an initial answer.
+# + valueString - The actual value to for an initial answer.
+# + valueDateTime - The actual value to for an initial answer.
 # + id - Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-# + valueQuestionnaireInteger - The actual value to for an initial answer.
-# + valueQuestionnaireString - The actual value to for an initial answer.
-# + valueQuestionnaireDate - The actual value to for an initial answer.
-# + valueQuestionnaireTime - The actual value to for an initial answer.
+# + valueInteger - The actual value to for an initial answer.
+# + valueQuantity - The actual value to for an initial answer.
+
 @r4:DataTypeDefinition {
     name: "QuestionnaireItemInitial",
     baseType: (),
     elements: {
+        "valueBoolean": {
+            name: "valueBoolean",
+            dataType: boolean,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "The actual value to for an initial answer.",
+            path: "Questionnaire.item.initial.value[x]"
+        },
+
+        "valueCoding": {
+            name: "valueCoding",
+            dataType: r4:Coding,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "The actual value to for an initial answer.",
+            path: "Questionnaire.item.initial.value[x]"
+        },
+
         "extension": {
             name: "extension",
             dataType: r4:Extension,
@@ -757,15 +812,27 @@ public enum QuestionnaireItemEnableWhenOperator {
             description: "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
             path: "Questionnaire.item.initial.extension"
         },
-        "valueQuestionnaireCoding": {
-            name: "valueQuestionnaireCoding",
-            dataType: r4:Coding,
-            min: 1,
+
+        "valueTime": {
+            name: "valueTime",
+            dataType: r4:time,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The actual value to for an initial answer.",
             path: "Questionnaire.item.initial.value[x]"
         },
+
+        "valueReference": {
+            name: "valueReference",
+            dataType: r4:Reference,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "The actual value to for an initial answer.",
+            path: "Questionnaire.item.initial.value[x]"
+        },
+
         "modifierExtension": {
             name: "modifierExtension",
             dataType: r4:Extension,
@@ -775,69 +842,67 @@ public enum QuestionnaireItemEnableWhenOperator {
             description: "May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).",
             path: "Questionnaire.item.initial.modifierExtension"
         },
-        "valueQuestionnaireUri": {
-            name: "valueQuestionnaireUri",
-            dataType: r4:uri,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "The actual value to for an initial answer.",
-            path: "Questionnaire.item.initial.value[x]"
-        },
-        "valueQuestionnaireBoolean": {
-            name: "valueQuestionnaireBoolean",
-            dataType: boolean,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "The actual value to for an initial answer.",
-            path: "Questionnaire.item.initial.value[x]"
-        },
-        "valueQuestionnaireAttachment": {
-            name: "valueQuestionnaireAttachment",
-            dataType: r4:Attachment,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "The actual value to for an initial answer.",
-            path: "Questionnaire.item.initial.value[x]"
-        },
-        "valueQuestionnaireReference": {
-            name: "valueQuestionnaireReference",
-            dataType: r4:Reference,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "The actual value to for an initial answer.",
-            path: "Questionnaire.item.initial.value[x]"
-        },
-        "valueQuestionnaireDecimal": {
-            name: "valueQuestionnaireDecimal",
+
+        "valueDecimal": {
+            name: "valueDecimal",
             dataType: decimal,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The actual value to for an initial answer.",
             path: "Questionnaire.item.initial.value[x]"
         },
-        "valueQuestionnaireDateTime": {
-            name: "valueQuestionnaireDateTime",
+
+        "valueUri": {
+            name: "valueUri",
+            dataType: r4:uri,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "The actual value to for an initial answer.",
+            path: "Questionnaire.item.initial.value[x]"
+        },
+
+        "valueDate": {
+            name: "valueDate",
+            dataType: r4:date,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "The actual value to for an initial answer.",
+            path: "Questionnaire.item.initial.value[x]"
+        },
+
+        "valueAttachment": {
+            name: "valueAttachment",
+            dataType: r4:Attachment,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "The actual value to for an initial answer.",
+            path: "Questionnaire.item.initial.value[x]"
+        },
+
+        "valueString": {
+            name: "valueString",
+            dataType: string,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "The actual value to for an initial answer.",
+            path: "Questionnaire.item.initial.value[x]"
+        },
+
+        "valueDateTime": {
+            name: "valueDateTime",
             dataType: r4:dateTime,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The actual value to for an initial answer.",
             path: "Questionnaire.item.initial.value[x]"
         },
-        "valueQuestionnaireQuantity": {
-            name: "valueQuestionnaireQuantity",
-            dataType: r4:Quantity,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "The actual value to for an initial answer.",
-            path: "Questionnaire.item.initial.value[x]"
-        },
+
         "id": {
             name: "id",
             dataType: string,
@@ -847,37 +912,21 @@ public enum QuestionnaireItemEnableWhenOperator {
             description: "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
             path: "Questionnaire.item.initial.id"
         },
-        "valueQuestionnaireInteger": {
-            name: "valueQuestionnaireInteger",
+
+        "valueInteger": {
+            name: "valueInteger",
             dataType: r4:integer,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The actual value to for an initial answer.",
             path: "Questionnaire.item.initial.value[x]"
         },
-        "valueQuestionnaireString": {
-            name: "valueQuestionnaireString",
-            dataType: string,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "The actual value to for an initial answer.",
-            path: "Questionnaire.item.initial.value[x]"
-        },
-        "valueQuestionnaireDate": {
-            name: "valueQuestionnaireDate",
-            dataType: r4:date,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "The actual value to for an initial answer.",
-            path: "Questionnaire.item.initial.value[x]"
-        },
-        "valueQuestionnaireTime": {
-            name: "valueQuestionnaireTime",
-            dataType: r4:time,
-            min: 1,
+
+        "valueQuantity": {
+            name: "valueQuantity",
+            dataType: r4:Quantity,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The actual value to for an initial answer.",
@@ -892,57 +941,59 @@ public enum QuestionnaireItemEnableWhenOperator {
 public type QuestionnaireItemInitial record {|
     *r4:BackboneElement;
 
+    boolean valueBoolean?;
+    r4:Coding valueCoding?;
     r4:Extension[] extension?;
-    r4:Coding valueQuestionnaireCoding;
+    r4:time valueTime?;
+    r4:Reference valueReference?;
     r4:Extension[] modifierExtension?;
-    r4:uri valueQuestionnaireUri;
-    boolean valueQuestionnaireBoolean;
-    r4:Attachment valueQuestionnaireAttachment;
-    r4:Reference valueQuestionnaireReference;
-    decimal valueQuestionnaireDecimal;
-    r4:dateTime valueQuestionnaireDateTime;
-    r4:Quantity valueQuestionnaireQuantity;
+    decimal valueDecimal?;
+    r4:uri valueUri?;
+    r4:date valueDate?;
+    r4:Attachment valueAttachment?;
+    string valueString?;
+    r4:dateTime valueDateTime?;
     string id?;
-    r4:integer valueQuestionnaireInteger;
-    string valueQuestionnaireString;
-    r4:date valueQuestionnaireDate;
-    r4:time valueQuestionnaireTime;
+    r4:integer valueInteger?;
+    r4:Quantity valueQuantity?;
 |};
 
 # FHIR QuestionnaireItemEnableWhen datatype record.
 #
-# + answerQuestionnaireReference - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
-# + answerQuestionnaireDate - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
+# + answerQuantity - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
+# + answerDateTime - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
 # + extension - May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+# + answerDate - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
+# + answerTime - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
 # + question - The linkId for the question whose answer (or lack of answer) governs whether this item is enabled.
-# + answerQuestionnaireDecimal - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
 # + modifierExtension - May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-# + answerQuestionnaireTime - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
-# + answerQuestionnaireString - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
-# + answerQuestionnaireCoding - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
-# + answerQuestionnaireInteger - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
-# + answerQuestionnaireQuantity - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
+# + answerInteger - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
 # + operator - Specifies the criteria by which the question is enabled.
-# + answerQuestionnaireDateTime - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
-# + answerQuestionnaireBoolean - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
+# + answerDecimal - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
+# + answerString - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
+# + answerCoding - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
+# + answerReference - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
 # + id - Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+# + answerBoolean - A value that the referenced question is tested using the specified operator in order for the item to be enabled.
+
 @r4:DataTypeDefinition {
     name: "QuestionnaireItemEnableWhen",
     baseType: (),
     elements: {
-        "answerQuestionnaireReference": {
-            name: "answerQuestionnaireReference",
-            dataType: r4:Reference,
-            min: 1,
+        "answerQuantity": {
+            name: "answerQuantity",
+            dataType: r4:Quantity,
+            min: 0,
             max: 1,
             isArray: false,
             description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
             path: "Questionnaire.item.enableWhen.answer[x]"
         },
-        "answerQuestionnaireDate": {
-            name: "answerQuestionnaireDate",
-            dataType: r4:date,
-            min: 1,
+
+        "answerDateTime": {
+            name: "answerDateTime",
+            dataType: r4:dateTime,
+            min: 0,
             max: 1,
             isArray: false,
             description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
@@ -957,6 +1008,27 @@ public type QuestionnaireItemInitial record {|
             description: "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
             path: "Questionnaire.item.enableWhen.extension"
         },
+
+        "answerDate": {
+            name: "answerDate",
+            dataType: r4:date,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
+            path: "Questionnaire.item.enableWhen.answer[x]"
+        },
+
+        "answerTime": {
+            name: "answerTime",
+            dataType: r4:time,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
+            path: "Questionnaire.item.enableWhen.answer[x]"
+        },
+
         "question": {
             name: "question",
             dataType: string,
@@ -966,15 +1038,7 @@ public type QuestionnaireItemInitial record {|
             description: "The linkId for the question whose answer (or lack of answer) governs whether this item is enabled.",
             path: "Questionnaire.item.enableWhen.question"
         },
-        "answerQuestionnaireDecimal": {
-            name: "answerQuestionnaireDecimal",
-            dataType: decimal,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
-            path: "Questionnaire.item.enableWhen.answer[x]"
-        },
+
         "modifierExtension": {
             name: "modifierExtension",
             dataType: r4:Extension,
@@ -984,51 +1048,17 @@ public type QuestionnaireItemInitial record {|
             description: "May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).",
             path: "Questionnaire.item.enableWhen.modifierExtension"
         },
-        "answerQuestionnaireTime": {
-            name: "answerQuestionnaireTime",
-            dataType: r4:time,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
-            path: "Questionnaire.item.enableWhen.answer[x]"
-        },
-        "answerQuestionnaireString": {
-            name: "answerQuestionnaireString",
-            dataType: string,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
-            path: "Questionnaire.item.enableWhen.answer[x]"
-        },
-        "answerQuestionnaireCoding": {
-            name: "answerQuestionnaireCoding",
-            dataType: r4:Coding,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
-            path: "Questionnaire.item.enableWhen.answer[x]"
-        },
-        "answerQuestionnaireInteger": {
-            name: "answerQuestionnaireInteger",
+
+        "answerInteger": {
+            name: "answerInteger",
             dataType: r4:integer,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
             path: "Questionnaire.item.enableWhen.answer[x]"
         },
-        "answerQuestionnaireQuantity": {
-            name: "answerQuestionnaireQuantity",
-            dataType: r4:Quantity,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
-            path: "Questionnaire.item.enableWhen.answer[x]"
-        },
+
         "operator": {
             name: "operator",
             dataType: QuestionnaireItemEnableWhenOperator,
@@ -1038,19 +1068,41 @@ public type QuestionnaireItemInitial record {|
             description: "Specifies the criteria by which the question is enabled.",
             path: "Questionnaire.item.enableWhen.operator"
         },
-        "answerQuestionnaireDateTime": {
-            name: "answerQuestionnaireDateTime",
-            dataType: r4:dateTime,
-            min: 1,
+
+        "answerDecimal": {
+            name: "answerDecimal",
+            dataType: decimal,
+            min: 0,
             max: 1,
             isArray: false,
             description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
             path: "Questionnaire.item.enableWhen.answer[x]"
         },
-        "answerQuestionnaireBoolean": {
-            name: "answerQuestionnaireBoolean",
-            dataType: boolean,
-            min: 1,
+
+        "answerString": {
+            name: "answerString",
+            dataType: string,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
+            path: "Questionnaire.item.enableWhen.answer[x]"
+        },
+
+        "answerCoding": {
+            name: "answerCoding",
+            dataType: r4:Coding,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
+            path: "Questionnaire.item.enableWhen.answer[x]"
+        },
+
+        "answerReference": {
+            name: "answerReference",
+            dataType: r4:Reference,
+            min: 0,
             max: 1,
             isArray: false,
             description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
@@ -1064,6 +1116,16 @@ public type QuestionnaireItemInitial record {|
             isArray: false,
             description: "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
             path: "Questionnaire.item.enableWhen.id"
+        },
+
+        "answerBoolean": {
+            name: "answerBoolean",
+            dataType: boolean,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "A value that the referenced question is tested using the specified operator in order for the item to be enabled.",
+            path: "Questionnaire.item.enableWhen.answer[x]"
         }
     },
     serializers: {
@@ -1074,20 +1136,20 @@ public type QuestionnaireItemInitial record {|
 public type QuestionnaireItemEnableWhen record {|
     *r4:BackboneElement;
 
-    r4:Reference answerQuestionnaireReference;
-    r4:date answerQuestionnaireDate;
+    r4:Quantity answerQuantity?;
+    r4:dateTime answerDateTime?;
     r4:Extension[] extension?;
+    r4:date answerDate?;
+    r4:time answerTime?;
     string question;
-    decimal answerQuestionnaireDecimal;
     r4:Extension[] modifierExtension?;
-    r4:time answerQuestionnaireTime;
-    string answerQuestionnaireString;
-    r4:Coding answerQuestionnaireCoding;
-    r4:integer answerQuestionnaireInteger;
-    r4:Quantity answerQuestionnaireQuantity;
+    r4:integer answerInteger?;
     QuestionnaireItemEnableWhenOperator operator;
-    r4:dateTime answerQuestionnaireDateTime;
-    boolean answerQuestionnaireBoolean;
+    decimal answerDecimal?;
+    string answerString?;
+    r4:Coding answerCoding?;
+    r4:Reference answerReference?;
     string id?;
+    boolean answerBoolean?;
 |};
 

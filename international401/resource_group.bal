@@ -1,4 +1,4 @@
-// Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
 
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -21,6 +21,8 @@ import ballerinax/health.fhir.r4;
 
 public const string PROFILE_BASE_GROUP = "http://hl7.org/fhir/StructureDefinition/Group";
 public const RESOURCE_NAME_GROUP = "Group";
+
+public type GroupExtensions (ArtifactEditor|ArtifactEndorser|ArtifactReviewer|CharacteristicExpression|CqfInputParameters|CqfTestArtifact|r4:Extension|ResourceApprovalDate|ResourceEffectivePeriod|ResourceLastReviewDate);
 
 # FHIR Group resource record.
 #
@@ -339,7 +341,7 @@ public enum GroupType {
         "valueCodeableConcept": {
             name: "valueCodeableConcept",
             dataType: r4:CodeableConcept,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The value of the trait that holds (or does not hold - see 'exclude') for members of the group.",
@@ -348,7 +350,7 @@ public enum GroupType {
         "valueBoolean": {
             name: "valueBoolean",
             dataType: boolean,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The value of the trait that holds (or does not hold - see 'exclude') for members of the group.",
@@ -384,7 +386,7 @@ public enum GroupType {
         "valueReference": {
             name: "valueReference",
             dataType: r4:Reference,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The value of the trait that holds (or does not hold - see 'exclude') for members of the group.",
@@ -393,7 +395,7 @@ public enum GroupType {
         "valueRange": {
             name: "valueRange",
             dataType: r4:Range,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The value of the trait that holds (or does not hold - see 'exclude') for members of the group.",
@@ -429,7 +431,7 @@ public enum GroupType {
         "valueQuantity": {
             name: "valueQuantity",
             dataType: r4:Quantity,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The value of the trait that holds (or does not hold - see 'exclude') for members of the group.",
@@ -444,16 +446,16 @@ public enum GroupType {
 public type GroupCharacteristic record {|
     *r4:BackboneElement;
 
-    r4:CodeableConcept valueCodeableConcept;
-    boolean valueBoolean;
+    r4:CodeableConcept valueCodeableConcept?;
+    boolean valueBoolean?;
     r4:Extension[] extension?;
     r4:Period period?;
     r4:CodeableConcept code;
-    r4:Reference valueReference;
-    r4:Range valueRange;
+    r4:Reference valueReference?;
+    r4:Range valueRange?;
     r4:Extension[] modifierExtension?;
     boolean exclude;
     string id?;
-    r4:Quantity valueQuantity;
+    r4:Quantity valueQuantity?;
 |};
 

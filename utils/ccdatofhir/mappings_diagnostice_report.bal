@@ -20,15 +20,16 @@
 
 import ballerinax/health.fhir.r4;
 import ballerinax/health.fhir.r4.uscore501;
+import ballerina/uuid;
 
 # Map CCDA Diagnostic Report to FHIR Diagnostic Report.
 #
 # + organizerElement - organizer element of the CCDA Diagnostic Report
+# + parentDocument - original CCDA document
 # + return - FHIR Diagnostic Report
-isolated function ccdaToDiagnosticReport(xml organizerElement) returns uscore501:USCoreDiagnosticReportProfileLaboratoryReporting? {
+isolated function ccdaToDiagnosticReport(xml organizerElement, xml parentDocument) returns uscore501:USCoreDiagnosticReportProfileLaboratoryReporting? {
     if isXMLElementNotNull(organizerElement) {
-        uscore501:USCoreDiagnosticReportProfileLaboratoryReporting diagnosticReport = {code: {}, status: "partial", effectivePeriod: {}, 
-        effectiveDateTime: "", subject: {}, issued: "", category: []};
+        uscore501:USCoreDiagnosticReportProfileLaboratoryReporting diagnosticReport = {code: {}, subject: {}, category: [], status: "partial"};
 
         xml idElement = organizerElement/<v3:id|id>;
         xml statusCodeElement = organizerElement/<v3:statusCode|statusCode>;
@@ -49,11 +50,11 @@ isolated function ccdaToDiagnosticReport(xml organizerElement) returns uscore501
 
         diagnosticReport.status = mapCcdatoFhirDiagnosticReportStatus(statusCodeElement);
 
-        r4:CodeableConcept? mapCcdaCodingtoFhirCodeableConceptResult = mapCcdaCodingToFhirCodeableConcept(translationElement);
+        r4:CodeableConcept? mapCcdaCodingtoFhirCodeableConceptResult = mapCcdaCodingToFhirCodeableConcept(translationElement, parentDocument);
         if mapCcdaCodingtoFhirCodeableConceptResult is r4:CodeableConcept {
             diagnosticReport.code = mapCcdaCodingtoFhirCodeableConceptResult;
         } else {
-            mapCcdaCodingtoFhirCodeableConceptResult = mapCcdaCodingToFhirCodeableConcept(codeElement);
+            mapCcdaCodingtoFhirCodeableConceptResult = mapCcdaCodingToFhirCodeableConcept(codeElement, parentDocument);
             if mapCcdaCodingtoFhirCodeableConceptResult is r4:CodeableConcept {
                 diagnosticReport.code = mapCcdaCodingtoFhirCodeableConceptResult;
             }
@@ -73,6 +74,8 @@ isolated function ccdaToDiagnosticReport(xml organizerElement) returns uscore501
         if mapCCDAEffectiveValueTimetoFHIRDateTimeResult is r4:dateTime {
             diagnosticReport.effectiveDateTime = mapCCDAEffectiveValueTimetoFHIRDateTimeResult;
         }
+        //generate the id for the diagnostic report
+        diagnosticReport.id = uuid:createRandomUuid();
         return diagnosticReport;
     }
     return ();

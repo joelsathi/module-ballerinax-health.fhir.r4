@@ -1,4 +1,4 @@
-// Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
 
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -21,6 +21,8 @@ import ballerinax/health.fhir.r4;
 
 public const string PROFILE_BASE_MEDICATIONREQUEST = "http://hl7.org/fhir/StructureDefinition/MedicationRequest";
 public const RESOURCE_NAME_MEDICATIONREQUEST = "MedicationRequest";
+
+public type MedicationRequestExtensions (r4:Extension|WorkflowEpisodeOfCare|WorkflowReleaseDate|WorkflowShallComplyWith);
 
 # FHIR MedicationRequest resource record.
 #
@@ -165,7 +167,7 @@ public const RESOURCE_NAME_MEDICATIONREQUEST = "MedicationRequest";
         "medicationReference" : {
             name: "medicationReference",
             dataType: r4:Reference,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             path: "MedicationRequest.medication[x]",
@@ -320,7 +322,7 @@ public const RESOURCE_NAME_MEDICATIONREQUEST = "MedicationRequest";
         "medicationCodeableConcept" : {
             name: "medicationCodeableConcept",
             dataType: r4:CodeableConcept,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             path: "MedicationRequest.medication[x]",
@@ -441,7 +443,7 @@ public type MedicationRequest record {|
     r4:Reference[] reasonReference?;
     r4:code language?;
     r4:uri[] instantiatesUri?;
-    r4:Reference medicationReference;
+    r4:Reference medicationReference?;
     r4:Reference reportedReference?;
     r4:CodeableConcept statusReason?;
     MedicationRequestDispenseRequest dispenseRequest?;
@@ -460,7 +462,7 @@ public type MedicationRequest record {|
     r4:Reference[] supportingInformation?;
     r4:Reference encounter?;
     r4:canonical[] instantiatesCanonical?;
-    r4:CodeableConcept medicationCodeableConcept;
+    r4:CodeableConcept medicationCodeableConcept?;
     MedicationRequestPriority priority?;
     MedicationRequestIntent intent;
     r4:CodeableConcept performerType?;
@@ -721,7 +723,7 @@ public enum MedicationRequestIntent {
         "allowedCodeableConcept": {
             name: "allowedCodeableConcept",
             dataType: r4:CodeableConcept,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "True if the prescriber allows a different drug to be dispensed from what was prescribed.",
@@ -757,7 +759,7 @@ public enum MedicationRequestIntent {
         "allowedBoolean": {
             name: "allowedBoolean",
             dataType: boolean,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "True if the prescriber allows a different drug to be dispensed from what was prescribed.",
@@ -781,11 +783,11 @@ public enum MedicationRequestIntent {
 public type MedicationRequestSubstitution record {|
     *r4:BackboneElement;
 
-    r4:CodeableConcept allowedCodeableConcept;
+    r4:CodeableConcept allowedCodeableConcept?;
     r4:CodeableConcept reason?;
     r4:Extension[] extension?;
     r4:Extension[] modifierExtension?;
-    boolean allowedBoolean;
+    boolean allowedBoolean?;
     string id?;
 |};
 

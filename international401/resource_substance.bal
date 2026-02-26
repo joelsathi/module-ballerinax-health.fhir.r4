@@ -1,4 +1,4 @@
-// Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
 
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -21,6 +21,8 @@ import ballerinax/health.fhir.r4;
 
 public const string PROFILE_BASE_SUBSTANCE = "http://hl7.org/fhir/StructureDefinition/Substance";
 public const RESOURCE_NAME_SUBSTANCE = "Substance";
+
+public type SubstanceExtensions (r4:Extension|MedicationManufacturingBatch);
 
 # FHIR Substance resource record.
 #
@@ -231,7 +233,7 @@ public type Substance record {|
         "substanceCodeableConcept": {
             name: "substanceCodeableConcept",
             dataType: r4:CodeableConcept,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "Another substance that is a component of this substance.",
@@ -258,7 +260,7 @@ public type Substance record {|
         "substanceReference": {
             name: "substanceReference",
             dataType: r4:Reference,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "Another substance that is a component of this substance.",
@@ -275,10 +277,10 @@ public type SubstanceIngredient record {|
 
     r4:Extension[] extension?;
     r4:Ratio quantity?;
-    r4:CodeableConcept substanceCodeableConcept;
+    r4:CodeableConcept substanceCodeableConcept?;
     r4:Extension[] modifierExtension?;
     string id?;
-    r4:Reference substanceReference;
+    r4:Reference substanceReference?;
 |};
 
 # FHIR SubstanceInstance datatype record.

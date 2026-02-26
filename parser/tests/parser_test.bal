@@ -268,3 +268,58 @@ function parseAndValidateWithUnmatchingResourceTypeTest() returns r4:FHIRParseEr
         test:assertFail("Expect to fail since the FHIR server is not capable of understanding the given FHIR resource.");
     }
 }
+
+@test:Config {}
+function parseWithValidationFailureTest() returns r4:FHIRParseError|r4:FHIRValidationError? {
+    anydata|r4:FHIRValidationError|r4:FHIRParseError? patient = parseWithValidation(TEST_FHIR_RESOURCE_JSON_INVALID_PATIENT_02);
+    if patient is r4:FHIRValidationError {
+        test:assertEquals(patient.message(), "FHIR resource validation failed");
+        r4:FHIRErrorDetail & readonly errorDetail = patient.detail();
+
+        string? diagnostic = errorDetail.issues[0].diagnostic;
+        if diagnostic is string {
+            test:assertEquals(diagnostic, "It should be a date, or partial date (e.g. just year or year + month) as used in human communication. The format is YYYY, YYYY-MM, " +
+                    "or YYYY-MM-DD, e.g. 2018, 1973-06, or 1905-08-23. There SHALL be no time zone. Refer: https://hl7.org/fhir/R4/datatypes.html.");
+        }
+    } else {
+        test:assertFail("Expect to fail since the FHIR server is not capable of understanding the given FHIR resource.");
+    }
+}
+
+@test:Config {}
+function parseWithValidationSuccessTest() returns r4:FHIRParseError|r4:FHIRValidationError? {
+    anydata|r4:FHIRValidationError|r4:FHIRParseError patient = parseWithValidation(TEST_FHIR_RESOURCE_JSON_VALID_PATIENT_01);
+    if patient is r4:FHIRValidationError {
+        test:assertEquals(patient.message(), "FHIR resource validation failed");
+        // r4:FHIRErrorDetail & readonly errorDetail = pat.detail();
+
+        // test:assertEquals(errorDetail.httpStatusCode, 400, "Error status code must be 400");
+    } else if patient is anydata {
+        test:assertTrue(patient is international401:Patient);
+    } else {
+
+    }
+}
+
+@test:Config {
+    enable: terminologyConfig?.isTerminologyValidationEnabled ?: false
+}
+function validateTerminologyTest() {
+    string[]? validationErrors = validateTerminologyData(TEST_FHIR_RESOURCE_JSON_PATIENT_02);
+    if validationErrors is string[] {
+        test:assertEquals(validationErrors.length(), 0, "Terminology validation failed with errors");
+    }
+}
+
+@test:Config {
+    enable: terminologyConfig?.isTerminologyValidationEnabled ?: false
+}
+function validateTerminologyNegativeTest() {
+    string[]? validationErrors = validateTerminologyData(TEST_FHIR_RESOURCE_JSON_PATIENT_02_INVALID_TERMINOLOGY);
+    if validationErrors is string[] {
+        test:assertTrue(validationErrors.length() > 0, "Expected terminology validation errors but none found");
+        test:assertTrue(validationErrors[0].startsWith("Terminology code "), "Unexpected error message: " + validationErrors[0]);
+    } else {
+        test:assertFail("Unexpected error during terminology validation, Cannot validate terminology codes");
+    }
+}

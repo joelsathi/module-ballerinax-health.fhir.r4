@@ -1,12 +1,9 @@
 // Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
-
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
-
 // http://www.apache.org/licenses/LICENSE-2.0
-
 // Unless required by applicable law or agreed to in writing,
 // software distributed under the License is distributed on an
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -73,9 +70,13 @@ public type CommonSearchParameterDefinition record {
     CommonSearchParameterPostProcessor? postProcessor;
 };
 
-public isolated function createRequestSearchParameter(FHIRSearchParameterDefinition|CommonSearchParameterDefinition definition,
-        FHIRSearchParameterModifier|string? modifier, anydata value) returns RequestSearchParameter|FHIRError {
-    match definition.'type {
+public isolated function createRequestSearchParameter(FHIRSearchParameterDefinition|CommonSearchParameterDefinition
+        |FHIROperationParameterDefinition definition, FHIRSearchParameterModifier|string? modifier,
+        anydata value) returns RequestSearchParameter|FHIRError {
+    FHIRSearchParameterType|string? 'type =
+        definition is FHIROperationParameterDefinition ? definition.searchType : definition.'type;
+
+    match 'type {
         STRING => {
             // Search parameter is a simple string
             string strValue = value.toString();
@@ -125,17 +126,17 @@ public isolated function createRequestSearchParameter(FHIRSearchParameterDefinit
             return createSearchParameterWrapper(definition.name, SPECIAL, value.toString(), specialResult);
         }
         _ => {
-            string message = string `Unknown search parameter type : ${definition.'type}`;
+            string message = string `Unknown search parameter type : ${'type.toString()}`;
             return <FHIRValidationError>createInternalFHIRError(message, ERROR, PROCESSING,
-                                                                        errorType = VALIDATION_ERROR,
-                                                                        diagnostic = message);
+                    errorType = VALIDATION_ERROR,
+                    diagnostic = message);
         }
     }
 }
 
-isolated function parseNumber(FHIRSearchParameterDefinition|CommonSearchParameterDefinition definition,
-        FHIRSearchParameterModifier|string? modifier, anydata value)
-        returns readonly & NumberSearchParameter|FHIRValidationError {
+isolated function parseNumber(FHIRSearchParameterDefinition|CommonSearchParameterDefinition
+        |FHIROperationParameterDefinition definition, FHIRSearchParameterModifier|string? modifier,
+        anydata value) returns readonly & NumberSearchParameter|FHIRValidationError {
     Prefix prefix;
     int|float decodedValue;
     if value is string {
@@ -156,7 +157,7 @@ isolated function parseNumber(FHIRSearchParameterDefinition|CommonSearchParamete
                 string message = string `Invalid value: "${value}" for the search parameter: ${definition.name}`;
                 string diagMsg = string `Int or Float value is expected for the search parameter : ${definition.name}`;
                 return <FHIRValidationError>createFHIRError(message, ERROR, PROCESSING, diagnostic = diagMsg,
-                                        errorType = VALIDATION_ERROR, httpStatusCode = http:STATUS_BAD_REQUEST);
+                        errorType = VALIDATION_ERROR, httpStatusCode = http:STATUS_BAD_REQUEST);
             }
         }
         prefix = prefixResult;
@@ -174,7 +175,7 @@ isolated function parseNumber(FHIRSearchParameterDefinition|CommonSearchParamete
                 string message = string `Invalid value: "${value.toString()}" for the search parameter: ${definition.name}`;
                 string diagMsg = string `Int or Float value is expected for the search parameter : ${definition.name}`;
                 return <FHIRValidationError>createFHIRError(message, ERROR, PROCESSING, diagnostic = diagMsg,
-                                        errorType = VALIDATION_ERROR, httpStatusCode = http:STATUS_BAD_REQUEST);
+                        errorType = VALIDATION_ERROR, httpStatusCode = http:STATUS_BAD_REQUEST);
             }
         }
     }
@@ -190,9 +191,9 @@ isolated function parseNumber(FHIRSearchParameterDefinition|CommonSearchParamete
     return sParameter;
 }
 
-isolated function parseToken(FHIRSearchParameterDefinition|CommonSearchParameterDefinition definition,
-        FHIRSearchParameterModifier|string? modifier, anydata value)
-        returns readonly & TokenSearchParameter|FHIRValidationError {
+isolated function parseToken(FHIRSearchParameterDefinition|CommonSearchParameterDefinition
+        |FHIROperationParameterDefinition definition, FHIRSearchParameterModifier|string? modifier,
+        anydata value) returns readonly & TokenSearchParameter|FHIRValidationError {
     if value is string {
         string[] split = regexp:split(re `\|`, value.trim());
         string? system = ();
@@ -217,9 +218,9 @@ isolated function parseToken(FHIRSearchParameterDefinition|CommonSearchParameter
             // Invalid format
             string message = string `Invalid value: "${value}" for the search parameter: ${definition.name}`;
             return <FHIRValidationError>createFHIRError(message, ERROR, PROCESSING,
-                                    diagnostic = message,
-                                    errorType = VALIDATION_ERROR,
-                                    httpStatusCode = http:STATUS_BAD_REQUEST);
+                    diagnostic = message,
+                    errorType = VALIDATION_ERROR,
+                    httpStatusCode = http:STATUS_BAD_REQUEST);
         }
         // validate modifier
         if modifier != () {
@@ -234,15 +235,15 @@ isolated function parseToken(FHIRSearchParameterDefinition|CommonSearchParameter
     } else {
         string message = string `Unsupported type : "${(typeof value).toBalString()}" for the search parameter: ${definition.name}`;
         return <FHIRValidationError>createFHIRError(message, ERROR, PROCESSING,
-                                diagnostic = message,
-                                errorType = VALIDATION_ERROR,
-                                httpStatusCode = http:STATUS_BAD_REQUEST);
+                diagnostic = message,
+                errorType = VALIDATION_ERROR,
+                httpStatusCode = http:STATUS_BAD_REQUEST);
     }
 }
 
-isolated function parseDate(FHIRSearchParameterDefinition|CommonSearchParameterDefinition definition,
-        FHIRSearchParameterModifier|string? modifier, anydata value)
-        returns readonly & DateSearchParameter|FHIRValidationError {
+isolated function parseDate(FHIRSearchParameterDefinition|CommonSearchParameterDefinition
+        |FHIROperationParameterDefinition definition, FHIRSearchParameterModifier|string? modifier,
+        anydata value) returns readonly & DateSearchParameter|FHIRValidationError {
     if value is string {
         var [prefix, decodedValue] = decodePrefixedValue(value);
         time:Civil|error civilTime = iso8601toCivil(decodedValue);
@@ -261,23 +262,23 @@ isolated function parseDate(FHIRSearchParameterDefinition|CommonSearchParameterD
             string message = string `Error occurred while parsing search parameter : "${definition.name}" with value : "${value.toBalString()}}"`;
             string diagMsg = civilTime.message();
             return <FHIRValidationError>createFHIRError(message, ERROR, PROCESSING,
-                                                            diagnostic = diagMsg,
-                                                            errorType = VALIDATION_ERROR,
-                                                            httpStatusCode = http:STATUS_BAD_REQUEST);
+                    diagnostic = diagMsg,
+                    errorType = VALIDATION_ERROR,
+                    httpStatusCode = http:STATUS_BAD_REQUEST);
         }
     } else {
         // Ideally are not reaching here
         string message = string `Error occurred while parsing search parameter : "${definition.name}" with value : "${value.toBalString()}}"`;
         string diagMsg = string `Unexpected type for the parameter value : ${(typeof value).toBalString()}`;
         return <FHIRValidationError>createFHIRError(message, ERROR, PROCESSING,
-                                                        diagnostic = diagMsg,
-                                                        errorType = VALIDATION_ERROR,
-                                                        httpStatusCode = http:STATUS_BAD_REQUEST);
+                diagnostic = diagMsg,
+                errorType = VALIDATION_ERROR,
+                httpStatusCode = http:STATUS_BAD_REQUEST);
     }
 }
 
-isolated function parseRefernce(FHIRSearchParameterDefinition|CommonSearchParameterDefinition definition,
-        FHIRSearchParameterModifier|string? modifier, anydata value)
+isolated function parseRefernce(FHIRSearchParameterDefinition|CommonSearchParameterDefinition
+        |FHIROperationParameterDefinition definition, FHIRSearchParameterModifier|string? modifier, anydata value)
         returns readonly & ReferenceSearchParameter|FHIRValidationError {
     if value is string {
         if value.indexOf("/") is () {
@@ -313,9 +314,9 @@ isolated function parseRefernce(FHIRSearchParameterDefinition|CommonSearchParame
                     string diagMsg = string `Search parameter : ${definition.name} of type Reference. Detected format : [parameter]=[type]/[id], 
                         but unknown/unsupported type`;
                     return <FHIRValidationError>createFHIRError(message, ERROR, PROCESSING,
-                                                                    diagnostic = diagMsg,
-                                                                    errorType = VALIDATION_ERROR,
-                                                                    httpStatusCode = http:STATUS_BAD_REQUEST);
+                            diagnostic = diagMsg,
+                            errorType = VALIDATION_ERROR,
+                            httpStatusCode = http:STATUS_BAD_REQUEST);
                 }
             } else {
                 // format : [parameter]=[url] z
@@ -339,14 +340,14 @@ isolated function parseRefernce(FHIRSearchParameterDefinition|CommonSearchParame
         string message = string `Error occurred while parsing search parameter : "${definition.name}" with value : "${value.toBalString()}}"`;
         string diagMsg = string `Unexpected type for the parameter value : ${(typeof value).toBalString()}`;
         return <FHIRValidationError>createFHIRError(message, ERROR, PROCESSING,
-                                                        diagnostic = diagMsg,
-                                                        errorType = VALIDATION_ERROR,
-                                                        httpStatusCode = http:STATUS_BAD_REQUEST);
+                diagnostic = diagMsg,
+                errorType = VALIDATION_ERROR,
+                httpStatusCode = http:STATUS_BAD_REQUEST);
     }
 }
 
-isolated function parseQuantity(FHIRSearchParameterDefinition|CommonSearchParameterDefinition definition,
-        FHIRSearchParameterModifier|string? modifier, anydata value)
+isolated function parseQuantity(FHIRSearchParameterDefinition|CommonSearchParameterDefinition
+        |FHIROperationParameterDefinition definition, FHIRSearchParameterModifier|string? modifier, anydata value)
         returns (QuantitySearchParameter & readonly)|FHIRParseError {
     if value is string {
         var [tempPrefix, strippedValue] = decodePrefixedValue(value);
@@ -363,7 +364,7 @@ isolated function parseQuantity(FHIRSearchParameterDefinition|CommonSearchParame
             string message = string `Invalid value for the search parameter : "${definition.name}"`;
             string diagMsg = string `Number component missing in the value : ${value}. Expected format is [parameter]=[prefix][number]|[system]|[code]`;
             return <FHIRParseError>createFHIRError(message, ERROR, PROCESSING, diagnostic = diagMsg,
-                                    errorType = PARSE_ERROR, httpStatusCode = http:STATUS_BAD_REQUEST);
+                    errorType = PARSE_ERROR, httpStatusCode = http:STATUS_BAD_REQUEST);
         }
         if valueComponents.length() > 1 {
             system = valueComponents[1].length() > 0 ? valueComponents[1] : ();
@@ -395,14 +396,14 @@ isolated function parseQuantity(FHIRSearchParameterDefinition|CommonSearchParame
         string message = string `Error occurred while parsing search parameter : "${definition.name}" with value : "${value.toBalString()}}"`;
         string diagMsg = string `Unexpected type for the parameter value : ${(typeof value).toBalString()}`;
         return <FHIRParseError>createFHIRError(message, ERROR, PROCESSING,
-                                                        diagnostic = diagMsg,
-                                                        errorType = PARSE_ERROR,
-                                                        httpStatusCode = http:STATUS_BAD_REQUEST);
+                diagnostic = diagMsg,
+                errorType = PARSE_ERROR,
+                httpStatusCode = http:STATUS_BAD_REQUEST);
     }
 }
 
-isolated function parseURI(FHIRSearchParameterDefinition|CommonSearchParameterDefinition definition,
-        FHIRSearchParameterModifier|string? modifier, anydata value)
+isolated function parseURI(FHIRSearchParameterDefinition|CommonSearchParameterDefinition
+        |FHIROperationParameterDefinition definition, FHIRSearchParameterModifier|string? modifier, anydata value)
         returns readonly & URISearchParameter|FHIRParseError {
     if value is string {
         if modifier != () {
@@ -421,14 +422,14 @@ isolated function parseURI(FHIRSearchParameterDefinition|CommonSearchParameterDe
         string message = string `Error occurred while parsing search parameter : "${definition.name}" with value : "${value.toBalString()}}"`;
         string diagMsg = string `Unexpected type for the parameter value : ${(typeof value).toBalString()}`;
         return <FHIRParseError>createFHIRError(message, ERROR, PROCESSING,
-                                                        diagnostic = diagMsg,
-                                                        errorType = PARSE_ERROR,
-                                                        httpStatusCode = http:STATUS_BAD_REQUEST);
+                diagnostic = diagMsg,
+                errorType = PARSE_ERROR,
+                httpStatusCode = http:STATUS_BAD_REQUEST);
     }
 }
 
-isolated function parseComposite(FHIRSearchParameterDefinition|CommonSearchParameterDefinition definition,
-        FHIRSearchParameterModifier|string? modifier, anydata value)
+isolated function parseComposite(FHIRSearchParameterDefinition|CommonSearchParameterDefinition
+        |FHIROperationParameterDefinition definition, FHIRSearchParameterModifier|string? modifier, anydata value)
         returns readonly & CompositeSearchParameter|FHIRParseError {
     if value is string {
         if modifier != () {
@@ -447,14 +448,14 @@ isolated function parseComposite(FHIRSearchParameterDefinition|CommonSearchParam
         string message = string `Error occurred while parsing search parameter : "${definition.name}" with value : "${value.toBalString()}}"`;
         string diagMsg = string `Unexpected type for the parameter value : ${(typeof value).toBalString()}`;
         return <FHIRParseError>createFHIRError(message, ERROR, PROCESSING,
-                                                        diagnostic = diagMsg,
-                                                        errorType = PARSE_ERROR,
-                                                        httpStatusCode = http:STATUS_BAD_REQUEST);
+                diagnostic = diagMsg,
+                errorType = PARSE_ERROR,
+                httpStatusCode = http:STATUS_BAD_REQUEST);
     }
 }
 
-isolated function parseSpecial(FHIRSearchParameterDefinition|CommonSearchParameterDefinition definition,
-        FHIRSearchParameterModifier|string? modifier, anydata value)
+isolated function parseSpecial(FHIRSearchParameterDefinition|CommonSearchParameterDefinition
+        |FHIROperationParameterDefinition definition, FHIRSearchParameterModifier|string? modifier, anydata value)
         returns readonly & SpecialSearchParameter|FHIRParseError {
     if value is string {
         if modifier != () {
@@ -474,9 +475,9 @@ isolated function parseSpecial(FHIRSearchParameterDefinition|CommonSearchParamet
         string message = string `Error occurred while parsing search parameter : "${definition.name}" with value : "${value.toBalString()}}"`;
         string diagMsg = string `Unexpected type for the parameter value : ${(typeof value).toBalString()}`;
         return <FHIRParseError>createFHIRError(message, ERROR, PROCESSING,
-                                                        diagnostic = diagMsg,
-                                                        errorType = PARSE_ERROR,
-                                                        httpStatusCode = http:STATUS_BAD_REQUEST);
+                diagnostic = diagMsg,
+                errorType = PARSE_ERROR,
+                httpStatusCode = http:STATUS_BAD_REQUEST);
     }
 }
 
@@ -495,7 +496,7 @@ isolated function stringToNumber(string value) returns int|float|FHIRParseError 
             string message = "Failed to parse to an Integer or Float";
             string diagMsg = string `Value : "${value}" cannot be parsed to an Integer or Float`;
             return <FHIRParseError>createFHIRError(message, ERROR, PROCESSING, diagnostic = diagMsg,
-                                    errorType = PARSE_ERROR, httpStatusCode = http:STATUS_BAD_REQUEST);
+                    errorType = PARSE_ERROR, httpStatusCode = http:STATUS_BAD_REQUEST);
         }
     }
 }
@@ -511,14 +512,14 @@ isolated function validateModifier(FHIRSearchParameterModifier|string modifier, 
             string message = "Incompatible search parameter modifier";
             string diagMsg = string `The modifier "${modifier}" is not compatible against parameter ("${definition.name}") of type : ${definition.'type}`;
             return <FHIRValidationError>createFHIRError(message, ERROR, PROCESSING,
-                                                                    errorType = VALIDATION_ERROR,
-                                                                    diagnostic = diagMsg);
+                    errorType = VALIDATION_ERROR,
+                    diagnostic = diagMsg);
         }
         string message = "Unknown search parameter modifier";
         string diagMsg = string `Incompatible modifier : "${modifier}" for search parameter : "${definition.name}"`;
         return <FHIRValidationError>createFHIRError(message, ERROR, PROCESSING,
-                                                                errorType = VALIDATION_ERROR,
-                                                                diagnostic = diagMsg);
+                errorType = VALIDATION_ERROR,
+                diagnostic = diagMsg);
     } else {
         if definition.'type == REFERENCE && fhirRegistry.isSupportedResource(modifier) {
             return;
@@ -526,8 +527,8 @@ isolated function validateModifier(FHIRSearchParameterModifier|string modifier, 
         string message = "Invalid search parameter modifier";
         string diagMsg = string `Modifier : "${modifier}" of search parameter : "${definition.name}" must be a valid supported FHIR resource type`;
         return <FHIRValidationError>createFHIRError(message, ERROR, PROCESSING,
-                                                                errorType = VALIDATION_ERROR,
-                                                                diagnostic = diagMsg);
+                errorType = VALIDATION_ERROR,
+                diagnostic = diagMsg);
     }
 }
 
@@ -543,7 +544,7 @@ isolated function paginationSearchParamPreProcessor(CommonSearchParameterDefinit
         string message = string `Invalid value for the search parameter: ${definition.name}`;
         string diagMsg = string `The value: "${query.values[0]}" is invalid for the search parameter: ${definition.name}. It Expect to be an Integer.`;
         return createFHIRError(message, ERROR, PROCESSING, diagnostic = diagMsg,
-                                errorType = VALIDATION_ERROR, httpStatusCode = http:STATUS_BAD_REQUEST);
+                errorType = VALIDATION_ERROR, httpStatusCode = http:STATUS_BAD_REQUEST);
     }
 }
 
@@ -565,7 +566,7 @@ isolated function _profileSearchParamPreProcessor(CommonSearchParameterDefinitio
         string message = string `Unsupported profile: "${profileStr}" for the resource: ${apiConfig.resourceType}. 
                                     Supported profiles are: ${apiConfig.profiles.toString()}`;
         return createFHIRError(message, ERROR, PROCESSING, diagnostic = message,
-                                    errorType = VALIDATION_ERROR, httpStatusCode = http:STATUS_BAD_REQUEST);
+                errorType = VALIDATION_ERROR, httpStatusCode = http:STATUS_BAD_REQUEST);
     }
 
     URISearchParameter & readonly param = {
@@ -634,8 +635,8 @@ public isolated function decodeSearchParameterKey(string paramName, string[] val
                     // Unknown search parameter modifier
                     string msg = string `Unknown search parameter modifier : ${paramSplitResult[1]}`;
                     return createFHIRError(msg, ERROR, PROCESSING_NOT_SUPPORTED,
-                                            diagnostic = msg, errorType = VALIDATION_ERROR,
-                                            httpStatusCode = http:STATUS_BAD_REQUEST);
+                            diagnostic = msg, errorType = VALIDATION_ERROR,
+                            httpStatusCode = http:STATUS_BAD_REQUEST);
                 }
             }
         }

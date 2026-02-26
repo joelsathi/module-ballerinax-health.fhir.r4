@@ -1,5 +1,4 @@
 // Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
-
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
@@ -20,10 +19,14 @@ public isolated class FHIRContext {
     private final FHIRRequest fhirRequest;
     private final readonly & FHIRSecurity fhirSecurity;
     private final readonly & HTTPRequest httpRequest;
+    private HTTPResponse? httpResponse = ();
     private FHIRResponse|FHIRContainerResponse? fhirResponse = ();
     private boolean inErrorState = false;
     private int errorCode = 500;
     private string rawPath = "";
+    private map<anydata> properties = {};
+    private PaginationContext? paginationContext = ();
+    private ConsentContext? consentContext = ();
 
     public isolated function init(FHIRRequest request, readonly & HTTPRequest httpRequest, readonly & FHIRSecurity security) {
         self.fhirRequest = request;
@@ -136,6 +139,116 @@ public isolated class FHIRContext {
     public isolated function getFHIRResponse() returns FHIRResponse|FHIRContainerResponse? {
         lock {
             return self.fhirResponse;
+        }
+    }
+
+    # Set custom HTTP response sent to client.
+    #
+    # + response - HTTP response object
+    public isolated function setHTTPResponse(HTTPResponse response) {
+        lock {
+            self.httpResponse = response.clone();
+        }
+    }
+
+    # Get custom HTTP response object.
+    #
+    # + return - HTTP response object in the context.
+    public isolated function getHTTPResponse() returns HTTPResponse? {
+        lock {
+            return self.httpResponse.clone();
+        }
+    }
+
+    # Add a custom response header to the response.
+    #
+    # + headerName - Header name
+    # + headerValue - Header value, for multiple values, use comma separated string
+    public isolated function addResponseHeader(string headerName, string headerValue) {
+
+        lock {
+            if (self.httpResponse is ()) {
+                self.httpResponse = {headers: {}, statusCode: ()};
+            }
+
+            HTTPResponse response = <HTTPResponse>self.httpResponse;
+
+            // If the header already exists. Override the initial value of the header.
+            response.headers[headerName] = headerValue;
+        }
+
+    }
+
+    # Set a custom status code to the Response.
+    #
+    # + statusCode - HTTP status code
+    public isolated function setResponseStatusCode(int statusCode) {
+
+        lock {
+            if (self.httpResponse is ()) {
+                self.httpResponse = {headers: {}, statusCode: ()};
+            }
+            HTTPResponse response = <HTTPResponse>self.httpResponse;
+            response.statusCode = statusCode;
+        }
+    }
+
+    # Get a property from the fhir context.
+    #
+    # + key - property key
+    # + return - property value
+    public isolated function getProperty(string key) returns anydata? {
+        lock {
+            if self.properties.hasKey(key) {
+                return self.properties.get(key).cloneReadOnly();
+            }
+        }
+        return;
+    }
+
+    # Set a property to the fhir context.
+    #
+    # + key - property key  
+    # + value - property value
+    public isolated function setProperty(string key, anydata value) {
+        lock {
+            self.properties[key] = value.cloneReadOnly();
+        }
+    }
+
+    # Set pagination info to fhir context.
+    #
+    # + paginationContext - Pagination context record with page size and page number
+    public isolated function setPaginationContext(PaginationContext paginationContext) {
+        lock {
+            self.paginationContext = paginationContext.cloneReadOnly();
+        }
+    }
+
+    # Get pagination info from fhir context.
+    #
+    # + return - Pagination context
+    public isolated function getPaginationContext() returns PaginationContext? {
+        lock {
+            return self.paginationContext;
+        }
+    }
+
+    # Set consent context to fhir context.
+    #
+    # + consentContext - Consent context record with consented resource types
+    public isolated function setConsentContext(ConsentContext consentContext) {
+        lock {
+            self.consentContext = consentContext.cloneReadOnly();
+        }
+    }
+
+    # Get consent context from fhir context.
+    #
+    # + return - Consent context
+    public isolated function getConsentContext() returns ConsentContext? {
+        lock {
+            return self.consentContext;
         }
     }
 

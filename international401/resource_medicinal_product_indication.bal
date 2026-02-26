@@ -1,4 +1,4 @@
-// Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
 
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -230,7 +230,7 @@ public type MedicinalProductIndication record {|
         "medicationReference": {
             name: "medicationReference",
             dataType: r4:Reference,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "Reference to a specific medication (active substance, medicinal product or class of products) as part of an indication or contraindication.",
@@ -275,7 +275,7 @@ public type MedicinalProductIndication record {|
         "medicationCodeableConcept": {
             name: "medicationCodeableConcept",
             dataType: r4:CodeableConcept,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "Reference to a specific medication (active substance, medicinal product or class of products) as part of an indication or contraindication.",
@@ -290,11 +290,11 @@ public type MedicinalProductIndication record {|
 public type MedicinalProductIndicationOtherTherapy record {|
     *r4:BackboneElement;
 
-    r4:Reference medicationReference;
+    r4:Reference medicationReference?;
     r4:Extension[] extension?;
     r4:CodeableConcept therapyRelationshipType;
     r4:Extension[] modifierExtension?;
     string id?;
-    r4:CodeableConcept medicationCodeableConcept;
+    r4:CodeableConcept medicationCodeableConcept?;
 |};
 

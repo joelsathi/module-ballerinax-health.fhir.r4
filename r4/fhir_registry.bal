@@ -14,6 +14,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/log;
+
 # Hold FHIR related information in a particular deployment
 public isolated class FHIRRegistry {
 
@@ -38,6 +40,16 @@ public isolated class FHIRRegistry {
         },
         "http://hl7.org/fhir/StructureDefinition/ValueSet": {
             url: "http://hl7.org/fhir/StructureDefinition/ValueSet",
+            resourceType: "ValueSet",
+            modelType: ValueSet
+        },
+        "http://hl7.org/fhir/StructureDefinition/shareablecodesystem": {
+            url: "http://hl7.org/fhir/StructureDefinition/shareablecodesystem",
+            resourceType: "CodeSystem",
+            modelType: CodeSystem
+        },
+        "http://hl7.org/fhir/StructureDefinition/shareablevalueset": {
+            url: "http://hl7.org/fhir/StructureDefinition/shareablevalueset",
             resourceType: "ValueSet",
             modelType: ValueSet
         }
@@ -72,6 +84,14 @@ public isolated class FHIRRegistry {
 
     // search parameter map (key: resource type)
     private map<SearchParamCollection> searchParameterMap = {};
+
+    // Operations map (key: resource type)
+    private map<OperationCollection> operationsMap = {};
+
+    // FHIR services map (key: resource type)
+    private FHIRServicesCollection fhirServicesMap = {};
+
+    private map<FhirAnalyticsPublisher> analyticsPublishersMap = {};    
 
     public function init() {
     }
@@ -132,6 +152,32 @@ public isolated class FHIRRegistry {
             }
         }
 
+        lock {
+            // Add operations
+            map<FHIROperationDefinition[]>? igOperationsDefinitionsMap = ig.getOperations();
+            if igOperationsDefinitionsMap != () {
+                foreach FHIROperationDefinition[] operationDefinitions in igOperationsDefinitionsMap {
+                    foreach FHIROperationDefinition operationDefinition in operationDefinitions {
+                        string[]? resources = operationDefinition.'resource;
+                        if resources is string[] {
+                            foreach string resourceType in resources {
+                                if self.operationsMap.hasKey(resourceType) {
+                                    OperationCollection collection = self.operationsMap.get(resourceType);
+                                    if !collection.hasKey(operationDefinition.name) {
+                                        collection[operationDefinition.name] = operationDefinition;
+                                    }
+                                } else {
+                                    OperationCollection collection = {};
+                                    collection[operationDefinition.name] = operationDefinition;
+                                    self.operationsMap[resourceType] = collection;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         // Update terminology processor
         terminologyProcessor.addTerminology(ig.getTerminology());
     }
@@ -176,6 +222,101 @@ public isolated class FHIRRegistry {
         return ();
     }
 
+    # Get the resource operations in the registry.
+    #
+    # + resourceType - The resource type
+    # + return - The operations in the registry
+    public isolated function getResourceOperations(string resourceType) returns OperationCollection {
+        lock {
+            if self.operationsMap.hasKey(resourceType) {
+                return self.operationsMap.get(resourceType).cloneReadOnly();
+            }
+        }
+        return {};
+    }
+
+    # Register a resource operation in the registry.
+    # + resourceType - The resource type
+    # + opConfig - The operation configuration to be registered
+    # + return - An error if the operation is invalid or an error occurred while registering the operation
+    public isolated function registerResourceOperation(string resourceType, OperationConfig opConfig) returns FHIRError? {
+        lock {
+            OperationCollection resourceOperations = {};
+            if self.operationsMap.hasKey(resourceType) {
+                resourceOperations = self.operationsMap.get(resourceType);
+            } else {
+                self.operationsMap[resourceType] = resourceOperations;
+            }
+            if !resourceOperations.hasKey(opConfig.name) {
+                // If the operation is not defined in resourceOperationDefinitions, it should be defined using the operationConfigMap
+                if opConfig.parameters is OperationParamConfig[] {
+                    log:printDebug(string `Processing operation parameters for ${opConfig.name}`);
+                    FHIROperationParameterDefinition[] operationParams = [];
+                    // Process operation parameters
+                    // Note: This is a placeholder for any specific processing logic for operation parameters
+                    foreach var item in <OperationParamConfig[]>opConfig.parameters {
+                        //create FHIROperationParameterDefinition for the operation
+                        FHIROperationParameterDefinition operationParam = {
+                            name: item.name,
+                            use: "in",
+                            min: item?.min != () ? <int>item.min : 0,
+                            max: item?.max != () ? <string>item.max : "*"
+                        };
+                        operationParams.push(operationParam);
+                    }
+
+                    FHIROperationDefinition operationDefinition = {
+                        name: opConfig.name,
+                        'parameter: operationParams,
+                        'resource: [resourceType],
+                        typeLevel: false,
+                        systemLevel: false,
+                        instanceLevel: false
+                    };
+                    json additionalProps = opConfig?.additionalProperties;
+                    //access the operation level information
+                    json|error metaInfo = additionalProps.meta;
+                    if metaInfo is json {
+                        json|error operationLevels = metaInfo.operationLevels;
+                        if operationLevels is json {
+                            json|error typeLevel = operationLevels.typeLevel;
+                            json|error systemLevel = operationLevels.systemLevel;
+                            json|error instanceLevel = operationLevels.instanceLevel;
+                            // Set the operation levels
+                            if typeLevel is boolean {
+                                operationDefinition.typeLevel = typeLevel;
+                            }
+                            // Set the system and instance levels
+                            if systemLevel is boolean {
+                                operationDefinition.systemLevel = <boolean>systemLevel;
+                            }
+                            if instanceLevel is boolean {
+                                operationDefinition.instanceLevel = <boolean>instanceLevel;
+                            }
+                        }
+                    }
+                    // Add the operation definition to the resourceOperations
+                    resourceOperations[opConfig.name] = operationDefinition;
+                }
+            }
+        }
+    }
+
+    # Get a resource operation in the registry by name.
+    #
+    # + resourceType - The resource type
+    # + operation - The name of the operation
+    # + return - The operation if found in the registry, otherwise ()
+    public isolated function getResourceOperationByName(string resourceType,
+            string operation) returns FHIROperationDefinition? {
+        lock {
+            if self.operationsMap.hasKey(resourceType) && self.operationsMap.get(resourceType).hasKey(operation) {
+                return self.operationsMap.get(resourceType).get(operation).clone();
+            }
+        }
+        return ();
+    }
+
     # Get the profiles in the registry
     #
     # + url - The url of the profile
@@ -211,7 +352,100 @@ public isolated class FHIRRegistry {
             return self.resourceTypeProfiles.hasKey(resourceType);
         }
     }
+
+    # Add a custom search parameter to the registry
+    #
+    # + resourceType - The resource type
+    # + searchParameter - The search parameter to be added
+    public isolated function addSearchParameter(string resourceType, FHIRSearchParameterDefinition searchParameter) {
+        lock {
+            if self.searchParameterMap.hasKey(resourceType) {
+                SearchParamCollection collection = self.searchParameterMap.get(resourceType);
+                if !collection.hasKey(searchParameter.name) {
+                    collection[searchParameter.name] = searchParameter.clone();
+                }
+            }
+        }
+    }
+
+    # Add a FHIR service to the registry
+    #
+    # + resourceType - The resource type
+    # + serviceInfo - The FHIR service information
+    public isolated function registerFHIRService(string resourceType, FHIRServiceInfo serviceInfo) {
+        lock {
+            if !self.fhirServicesMap.hasKey(resourceType) {
+                self.fhirServicesMap[resourceType] = serviceInfo.clone();
+            }
+        }
+    }
+
+    # Get a FHIR service from the registry by resource type
+    #
+    # + resourceType - The resource type
+    # + return - The FHIR service information if found, otherwise ()
+    public isolated function getFHIRService(string resourceType) returns FHIRServiceInfo? {
+        lock {
+            if self.fhirServicesMap.hasKey(resourceType) {
+                return self.fhirServicesMap.get(resourceType).clone();
+            }
+        }
+        return ();
+    }
+
+    # Get all FHIR services in the registry
+    # + return - A map of FHIR services where the key is the resource type
+    public isolated function getAllRegisteredFHIRServices() returns FHIRServicesCollection {
+        lock {
+            return self.fhirServicesMap.cloneReadOnly();
+        }
+    }
+
+    # Remove a FHIR service from the registry
+    #
+    # + resourceType - The resource type
+    # + return - True if the service was removed, false if not found
+    public isolated function removeFHIRService(string resourceType) returns boolean {
+        lock {
+            if self.fhirServicesMap.hasKey(resourceType) {
+                _ = self.fhirServicesMap.remove(resourceType);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    # Add an analytics publisher to the registry
+    #
+    # + publisherName - The name of the analytics publisher
+    # + publisher - The FhirAnalyticsPublisher implementation
+    public isolated function registerAnalyticsPublisher(string publisherName, FhirAnalyticsPublisher publisher) {
+        lock {
+            if !self.analyticsPublishersMap.hasKey(publisherName) {
+                self.analyticsPublishersMap[publisherName] = publisher;
+            }
+        }
+    }
+
+    # Get an analytics publisher from the registry by name
+    #
+    # + publisherName - The name of the analytics publisher
+    # + return - The FHIR service information if found, otherwise ()
+    public isolated function getFhirAnalyticsPublisher(string publisherName) returns FhirAnalyticsPublisher? {
+        lock {
+            if self.analyticsPublishersMap.hasKey(publisherName) {
+                return self.analyticsPublishersMap.get(publisherName);
+            }
+        }
+        return ();
+    }
 }
 
 # Search parameter map (key: parameter name)
 public type SearchParamCollection map<FHIRSearchParameterDefinition>;
+
+# Operation map (key: operation name)
+public type OperationCollection map<FHIROperationDefinition>;
+
+# FHIR services map (key: service name)
+public type FHIRServicesCollection map<FHIRServiceInfo>;

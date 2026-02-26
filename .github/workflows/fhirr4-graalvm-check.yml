@@ -3,6 +3,9 @@ name: FHIRR4 GraalVM Check
 on:
   workflow_dispatch:
 
+env:
+  BALLERINA_VERSION: 2201.12.3
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,7 +18,7 @@ jobs:
         with:
           version: 'latest'
           distribution: 'graalvm-community'
-          java-version: '17'
+          java-version: '21'
           components: 'native-image'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -28,12 +31,12 @@ jobs:
       - name: Set Up Ballerina
         uses: ballerina-platform/setup-ballerina@v1.1.0
         with:
-          version: 2201.8.1
+          version: $BALLERINA_VERSION
 
       - name: Setup Java and Maven
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
 
       - name: Create settings.xml

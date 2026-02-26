@@ -24,32 +24,32 @@ import ballerinax/health.fhir.r4;
 Listener fhirListener = check new (9292, apiConfig);
 http:Client fhirClient = check new ("http://localhost:9292/fhir/r4");
 
-@test:BeforeSuite
+@test:BeforeGroups { value:["FhirService"] }
 function startService() returns error? {
     check fhirListener.attach(fhirService);
     check fhirListener.'start();
     log:printInfo("FHIR test service has started");
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testRead() returns error? {
     international401:Patient|ServiceTestError response = check fhirClient->get("/Patient/1");
     test:assertTrue(response is international401:Patient);
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testVRead() returns error? {
     international401:Patient|ServiceTestError response = check fhirClient->get("/Patient/1/_history/1");
     test:assertTrue(response is international401:Patient);
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testSearch() returns error? {
     r4:Bundle|ServiceTestError response = check fhirClient->get("/Patient?_id=1");
     test:assertTrue(response is r4:Bundle);
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testSearchUnsupportedSearchParam() returns error? {
     http:Response|ServiceTestError response = check fhirClient->get("/Patient?parent=1");
     if response is http:Response {
@@ -73,7 +73,7 @@ function testSearchUnsupportedSearchParam() returns error? {
     }
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testUpdate() returns error? {
     international401:Patient patient = {
         resourceType: "Patient",
@@ -94,7 +94,7 @@ function testUpdate() returns error? {
     }
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testUpdateMissingID() returns error? {
     international401:Patient patient = {
         resourceType: "Patient",
@@ -126,7 +126,7 @@ function testUpdateMissingID() returns error? {
     }
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testUpdateIncorrectID() returns error?{
     international401:Patient patient = {
         resourceType: "Patient",
@@ -159,7 +159,7 @@ function testUpdateIncorrectID() returns error?{
     }
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testCreate() returns error? {
     international401:Patient patient = {
         resourceType: "Patient",
@@ -180,9 +180,9 @@ function testCreate() returns error? {
     }
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testCreateInvalidPayload() returns error? {
-    json patient = {
+    json patient = { 
         resourceType: "Patient",
         id: "1",
         familyname: [
@@ -201,7 +201,82 @@ function testCreateInvalidPayload() returns error? {
     }
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService", "conditional_interactions"] }
+function testCreateConditional412() returns error? {
+    international401:Patient patient = {
+        resourceType: "Patient",
+        name: [
+            {
+                "family": "Smith",
+                "given": ["John"]
+            }
+        ],
+        id: "150"
+    };
+    map<string> headers = {
+        "If-None-Exist": "http://localhost:9292/fhir/r4/Patient" // not ID for 412
+    };
+    http:Response|ServiceTestError response = check fhirClient->post("/Patient", message = patient, headers = headers, mediaType = r4:FHIR_MIME_TYPE_JSON);
+    test:assertTrue(response is http:Response);
+    if response is http:Response {
+        // 412 for multiple resources
+        test:assertEquals(response.statusCode, 412);
+    } else {
+        test:assertFail("Error in service invocation");
+    }
+}
+
+@test:Config { groups: ["FhirService", "conditional_interactions"] }
+function testCreateConditionalExistingResource() returns error? {
+    international401:Patient patient = {
+        resourceType: "Patient",
+        name: [
+            {
+                "family": "Smith",
+                "given": ["John"]
+            }
+        ],
+        id: "1"
+    };
+    map<string> headers = {
+        "If-None-Exist": "http://localhost:9292/fhir/r4/Patient?_id=1"
+    };
+    http:Response|ServiceTestError response = check fhirClient->post("/Patient", message = patient, headers = headers, mediaType = r4:FHIR_MIME_TYPE_JSON);
+    test:assertTrue(response is http:Response);
+    if response is http:Response {
+        // 200 for existing resource
+        test:assertEquals(response.statusCode, 200);
+    } else {
+        test:assertFail("Error in service invocation");
+    }
+}
+
+@test:Config { groups: ["FhirService", "conditional_interactions"] }
+function testCreateConditionalSuccess() returns error? {
+    international401:Patient patient = {
+        resourceType: "Patient",
+        name: [
+            {
+                "family": "Smith",
+                "given": ["John"]
+            }
+        ],
+        id: "1"
+    };
+    map<string> headers = {
+        "If-None-Exist": "http://localhost:9292/fhir/r4/Patient?_id=New"
+    };
+    http:Response|ServiceTestError response = check fhirClient->post("/Patient", message = patient, headers = headers, mediaType = r4:FHIR_MIME_TYPE_JSON);
+    test:assertTrue(response is http:Response);
+    if response is http:Response {
+        // 201 created for new resource
+        test:assertEquals(response.statusCode, 201);
+    } else {
+        test:assertFail("Error in service invocation");
+    }
+}
+
+@test:Config { groups: ["FhirService"] }
 function testPatch() returns error? {
     json patient = {
         name: [
@@ -220,7 +295,7 @@ function testPatch() returns error? {
     }
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testPatchWithIncorrectMime() returns error? {
     json patient = {
         name: [
@@ -239,7 +314,7 @@ function testPatchWithIncorrectMime() returns error? {
     }
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testDetete() returns error? {
     http:Response|ServiceTestError response = check fhirClient->delete("/Patient/1");
     test:assertTrue(response is http:Response);
@@ -250,27 +325,37 @@ function testDetete() returns error? {
     }
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testInstanceHistory() returns error? {
     r4:Bundle|ServiceTestError response = check fhirClient->get("/Patient/1/_history");
     test:assertTrue(response is r4:Bundle);
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testTypeHistory() returns error? {
     r4:Bundle|ServiceTestError response = check fhirClient->get("/Patient/_history");
     test:assertTrue(response is r4:Bundle);
 }
 
-@test:Config {}
+@test:Config { groups: ["FhirService"] }
 function testMetadata() returns error? {
     international401:CapabilityStatement|ServiceTestError response = check fhirClient->get("/metadata");
     test:assertTrue(response is international401:CapabilityStatement);
 }
 
-@test:AfterSuite
+@test:Config { groups: ["FhirService"] }
+function testInvalidApiConfig() returns error? {
+    r4:ResourceAPIConfig invalidApiConfig = {operations: [], authzConfig: (), profiles: [], defaultProfile: (), 
+        searchParameters: [], serverConfig: (), resourceType: ""};
+    Listener|error fhirListener = new (config = invalidApiConfig);
+    test:assertTrue(fhirListener is error, "Expected an error when creating a listener with invalid API config");
+    if fhirListener is error {
+        test:assertEquals(fhirListener.message(), "Resource type cannot be empty in the API config. Please provide a valid FHIR resource type.");
+    } 
+}
+
+@test:AfterGroups { value:["FhirService"] }
 function stopService() returns error? {
     check fhirListener.gracefulStop();
     log:printInfo("FHIR test service has stopped");
-
 }

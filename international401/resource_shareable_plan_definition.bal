@@ -1,4 +1,4 @@
-// Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
 
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -19,10 +19,12 @@
 
 import ballerinax/health.fhir.r4;
 
-public const string PROFILE_BASE_SHAREABLE_PLANDEFINITION = "http://hl7.org/fhir/StructureDefinition/shareableplandefinition";
-public const RESOURCE_NAME_SHAREABLE_PLANDEFINITION = "PlanDefinition";
+public const string PROFILE_BASE_SHAREABLEPLANDEFINITION = "http://hl7.org/fhir/StructureDefinition/shareableplandefinition";
+public const RESOURCE_NAME_SHAREABLEPLANDEFINITION = "PlanDefinition";
 
-# FHIR Shareable_PlanDefinition resource record.
+public type ShareablePlanDefinitionExtensions (CqfCdsHooksEndpoint|CqfTargetInvariant|r4:Extension|Replaces|TargetConstraint|Variable|WorkflowShallComplyWith);
+
+# FHIR ShareablePlanDefinition resource record.
 #
 # + resourceType - The type of the resource describes
 # + date - The date (and optionally time) when the plan definition was published. The date must change when the business version changes and it must change if the status code changes. In addition, it should change when the substantive content of the plan definition changes.
@@ -212,7 +214,7 @@ public const RESOURCE_NAME_SHAREABLE_PLANDEFINITION = "PlanDefinition";
         },
         "action" : {
             name: "action",
-            dataType: Shareable_PlanDefinitionAction,
+            dataType: ShareablePlanDefinitionAction,
             min: 0,
             max: int:MAX_VALUE,
             isArray: true,
@@ -252,7 +254,7 @@ public const RESOURCE_NAME_SHAREABLE_PLANDEFINITION = "PlanDefinition";
         },
         "goal" : {
             name: "goal",
-            dataType: Shareable_PlanDefinitionGoal,
+            dataType: ShareablePlanDefinitionGoal,
             min: 0,
             max: int:MAX_VALUE,
             isArray: true,
@@ -390,7 +392,7 @@ public const RESOURCE_NAME_SHAREABLE_PLANDEFINITION = "PlanDefinition";
         },
         "status" : {
             name: "status",
-            dataType: Shareable_PlanDefinitionStatus,
+            dataType: ShareablePlanDefinitionStatus,
             min: 1,
             max: 1,
             isArray: false,
@@ -403,10 +405,11 @@ public const RESOURCE_NAME_SHAREABLE_PLANDEFINITION = "PlanDefinition";
         'json: r4:fhirResourceJsonSerializer
     }
 }
-public type Shareable_PlanDefinition record {|
+
+public type ShareablePlanDefinition record {|
     *r4:DomainResource;
 
-    RESOURCE_NAME_SHAREABLE_PLANDEFINITION resourceType = RESOURCE_NAME_SHAREABLE_PLANDEFINITION;
+    RESOURCE_NAME_SHAREABLEPLANDEFINITION resourceType = RESOURCE_NAME_SHAREABLEPLANDEFINITION;
 
     r4:dateTime date?;
     r4:markdown copyright?;
@@ -425,12 +428,12 @@ public type Shareable_PlanDefinition record {|
     r4:canonical[] library?;
     r4:ContactDetail[] contact?;
     r4:ContactDetail[] endorser?;
-    Shareable_PlanDefinitionAction[] action?;
+    ShareablePlanDefinitionAction[] action?;
     string id?;
     r4:Narrative text?;
     r4:ContactDetail[] editor?;
     r4:Identifier[] identifier?;
-    Shareable_PlanDefinitionGoal[] goal?;
+    ShareablePlanDefinitionGoal[] goal?;
     r4:RelatedArtifact[] relatedArtifact?;
     r4:Period effectivePeriod?;
     r4:ContactDetail[] author?;
@@ -447,34 +450,11 @@ public type Shareable_PlanDefinition record {|
     string publisher;
     r4:CodeableConcept[] topic?;
     r4:UsageContext[] useContext?;
-    Shareable_PlanDefinitionStatus status;
+    ShareablePlanDefinitionStatus status;
     r4:Element ...;
 |};
 
-# Shareable_PlanDefinitionStatus enum
-public enum Shareable_PlanDefinitionStatus {
-   CODE_STATUS_DRAFT = "draft",
-   CODE_STATUS_ACTIVE = "active",
-   CODE_STATUS_RETIRED = "retired",
-   CODE_STATUS_UNKNOWN = "unknown"
-}
-
-# Shareable_PlanDefinitionActionConditionKind enum
-public enum Shareable_PlanDefinitionActionConditionKind {
-   CODE_KIND_STOP = "stop",
-   CODE_KIND_START = "start",
-   CODE_KIND_APPLICABILITY = "applicability"
-}
-
-# Shareable_PlanDefinitionActionParticipantType enum
-public enum Shareable_PlanDefinitionActionParticipantType {
-   CODE_TYPE_RELATED_PERSON = "related-person",
-   CODE_TYPE_PRACTITIONER = "practitioner",
-   CODE_TYPE_PATIENT = "patient",
-   CODE_TYPE_DEVICE = "device"
-}
-
-# FHIR Shareable_PlanDefinitionGoal datatype record.
+# FHIR ShareablePlanDefinitionGoal datatype record.
 #
 # + addresses - Identifies problems, conditions, issues, or concerns the goal is intended to address.
 # + extension - May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
@@ -487,7 +467,7 @@ public enum Shareable_PlanDefinitionActionParticipantType {
 # + priority - Identifies the expected level of importance associated with reaching/sustaining the defined goal.
 # + target - Indicates what should be done and within what timeframe.
 @r4:DataTypeDefinition {
-    name: "Shareable_PlanDefinitionGoal",
+    name: "ShareablePlanDefinitionGoal",
     baseType: (),
     elements: {
         "addresses": {
@@ -573,7 +553,7 @@ public enum Shareable_PlanDefinitionActionParticipantType {
         },
         "target": {
             name: "target",
-            dataType: Shareable_PlanDefinitionGoalTarget,
+            dataType: ShareablePlanDefinitionGoalTarget,
             min: 0,
             max: int:MAX_VALUE,
             isArray: true,
@@ -586,7 +566,8 @@ public enum Shareable_PlanDefinitionActionParticipantType {
         'json: r4:complexDataTypeJsonSerializer
     }
 }
-public type Shareable_PlanDefinitionGoal record {|
+
+public type ShareablePlanDefinitionGoal record {|
     *r4:BackboneElement;
 
     r4:CodeableConcept[] addresses?;
@@ -598,32 +579,31 @@ public type Shareable_PlanDefinitionGoal record {|
     string id?;
     r4:CodeableConcept category?;
     r4:CodeableConcept priority?;
-    Shareable_PlanDefinitionGoalTarget[] target?;
+    ShareablePlanDefinitionGoalTarget[] target?;
 |};
 
-# FHIR Shareable_PlanDefinitionGoalTarget datatype record.
+# ShareablePlanDefinitionActionSelectionBehavior enum
+public enum ShareablePlanDefinitionActionSelectionBehavior {
+    CODE_SELECTIONBEHAVIOR_ALL = "all",
+    CODE_SELECTIONBEHAVIOR_EXACTLY_ONE = "exactly-one",
+    CODE_SELECTIONBEHAVIOR_AT_MOST_ONE = "at-most-one",
+    CODE_SELECTIONBEHAVIOR_ALL_OR_NONE = "all-or-none",
+    CODE_SELECTIONBEHAVIOR_ANY = "any",
+    CODE_SELECTIONBEHAVIOR_ONE_OR_MORE = "one-or-more"
+}
+
+# FHIR ShareablePlanDefinitionActionCondition datatype record.
 #
-# + detailPlanDefinitionCodeableConcept - The target value of the measure to be achieved to signify fulfillment of the goal, e.g. 150 pounds or 7.0%. Either the high or low or both values of the range can be specified. When a low value is missing, it indicates that the goal is achieved at any value at or below the high value. Similarly, if the high value is missing, it indicates that the goal is achieved at any value at or above the low value.
 # + extension - May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-# + measure - The parameter whose value is to be tracked, e.g. body weight, blood pressure, or hemoglobin A1c level.
-# + due - Indicates the timeframe after the start of the goal in which the goal should be met.
-# + detailPlanDefinitionQuantity - The target value of the measure to be achieved to signify fulfillment of the goal, e.g. 150 pounds or 7.0%. Either the high or low or both values of the range can be specified. When a low value is missing, it indicates that the goal is achieved at any value at or below the high value. Similarly, if the high value is missing, it indicates that the goal is achieved at any value at or above the low value.
+# + expression - An expression that returns true or false, indicating whether the condition is satisfied.
+# + kind - The kind of condition.
 # + modifierExtension - May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
 # + id - Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-# + detailPlanDefinitionRange - The target value of the measure to be achieved to signify fulfillment of the goal, e.g. 150 pounds or 7.0%. Either the high or low or both values of the range can be specified. When a low value is missing, it indicates that the goal is achieved at any value at or below the high value. Similarly, if the high value is missing, it indicates that the goal is achieved at any value at or above the low value.
+
 @r4:DataTypeDefinition {
-    name: "Shareable_PlanDefinitionGoalTarget",
+    name: "ShareablePlanDefinitionActionCondition",
     baseType: (),
     elements: {
-        "detailPlanDefinitionCodeableConcept": {
-            name: "detailPlanDefinitionCodeableConcept",
-            dataType: r4:CodeableConcept,
-            min: 0,
-            max: 1,
-            isArray: false,
-            description: "The target value of the measure to be achieved to signify fulfillment of the goal, e.g. 150 pounds or 7.0%. Either the high or low or both values of the range can be specified. When a low value is missing, it indicates that the goal is achieved at any value at or below the high value. Similarly, if the high value is missing, it indicates that the goal is achieved at any value at or above the low value.",
-            path: "PlanDefinition.goal.target.detail[x]"
-        },
         "extension": {
             name: "extension",
             dataType: r4:Extension,
@@ -631,34 +611,122 @@ public type Shareable_PlanDefinitionGoal record {|
             max: int:MAX_VALUE,
             isArray: true,
             description: "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
-            path: "PlanDefinition.goal.target.extension"
+            path: "PlanDefinition.action.condition.extension"
         },
-        "measure": {
-            name: "measure",
+
+        "expression": {
+            name: "expression",
+            dataType: r4:Expression,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "An expression that returns true or false, indicating whether the condition is satisfied.",
+            path: "PlanDefinition.action.condition.expression"
+        },
+
+        "kind": {
+            name: "kind",
+            dataType: ShareablePlanDefinitionActionConditionKind,
+            min: 1,
+            max: 1,
+            isArray: false,
+            description: "The kind of condition.",
+            path: "PlanDefinition.action.condition.kind"
+        },
+
+        "modifierExtension": {
+            name: "modifierExtension",
+            dataType: r4:Extension,
+            min: 0,
+            max: int:MAX_VALUE,
+            isArray: true,
+            description: "May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).",
+            path: "PlanDefinition.action.condition.modifierExtension"
+        },
+
+        "id": {
+            name: "id",
+            dataType: string,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+            path: "PlanDefinition.action.condition.id"
+        }
+        },
+
+    serializers: {
+        'xml: r4:complexDataTypeXMLSerializer,
+        'json: r4:complexDataTypeJsonSerializer
+    }
+}
+
+public type ShareablePlanDefinitionActionCondition record {|
+    *r4:BackboneElement;
+
+    r4:Extension[] extension?;
+    r4:Expression expression?;
+    ShareablePlanDefinitionActionConditionKind kind;
+    r4:Extension[] modifierExtension?;
+    string id?;
+|};
+
+# ShareablePlanDefinitionActionCardinalityBehavior enum
+public enum ShareablePlanDefinitionActionCardinalityBehavior {
+    CODE_CARDINALITYBEHAVIOR_SINGLE = "single",
+    CODE_CARDINALITYBEHAVIOR_MULTIPLE = "multiple"
+}
+
+# ShareablePlanDefinitionActionRelatedActionRelationship enum
+public enum ShareablePlanDefinitionActionRelatedActionRelationship {
+    CODE_RELATIONSHIP_AFTER_END = "after-end",
+    CODE_RELATIONSHIP_BEFORE = "before",
+    CODE_RELATIONSHIP_CONCURRENT_WITH_START = "concurrent-with-start",
+    CODE_RELATIONSHIP_CONCURRENT = "concurrent",
+    CODE_RELATIONSHIP_BEFORE_END = "before-end",
+    CODE_RELATIONSHIP_AFTER = "after",
+    CODE_RELATIONSHIP_CONCURRENT_WITH_END = "concurrent-with-end",
+    CODE_RELATIONSHIP_AFTER_START = "after-start",
+    CODE_RELATIONSHIP_BEFORE_START = "before-start"
+}
+
+# ShareablePlanDefinitionActionGroupingBehavior enum
+public enum ShareablePlanDefinitionActionGroupingBehavior {
+    CODE_GROUPINGBEHAVIOR_VISUAL_GROUP = "visual-group",
+    CODE_GROUPINGBEHAVIOR_SENTENCE_GROUP = "sentence-group",
+    CODE_GROUPINGBEHAVIOR_LOGICAL_GROUP = "logical-group"
+}
+
+# FHIR ShareablePlanDefinitionActionParticipant datatype record.
+#
+# + extension - May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+# + role - The role the participant should play in performing the described action.
+# + modifierExtension - May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
+# + id - Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+# + 'type - The type of participant in the action.
+
+@r4:DataTypeDefinition {
+    name: "ShareablePlanDefinitionActionParticipant",
+    baseType: (),
+    elements: {
+        "extension": {
+            name: "extension",
+            dataType: r4:Extension,
+            min: 0,
+            max: int:MAX_VALUE,
+            isArray: true,
+            description: "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+            path: "PlanDefinition.action.participant.extension"
+        },
+
+        "role": {
+            name: "role",
             dataType: r4:CodeableConcept,
             min: 0,
             max: 1,
             isArray: false,
-            description: "The parameter whose value is to be tracked, e.g. body weight, blood pressure, or hemoglobin A1c level.",
-            path: "PlanDefinition.goal.target.measure"
-        },
-        "due": {
-            name: "due",
-            dataType: r4:Duration,
-            min: 0,
-            max: 1,
-            isArray: false,
-            description: "Indicates the timeframe after the start of the goal in which the goal should be met.",
-            path: "PlanDefinition.goal.target.due"
-        },
-        "detailPlanDefinitionQuantity": {
-            name: "detailPlanDefinitionQuantity",
-            dataType: r4:Quantity,
-            min: 0,
-            max: 1,
-            isArray: false,
-            description: "The target value of the measure to be achieved to signify fulfillment of the goal, e.g. 150 pounds or 7.0%. Either the high or low or both values of the range can be specified. When a low value is missing, it indicates that the goal is achieved at any value at or below the high value. Similarly, if the high value is missing, it indicates that the goal is achieved at any value at or above the low value.",
-            path: "PlanDefinition.goal.target.detail[x]"
+            description: "The role the participant should play in performing the described action.",
+            path: "PlanDefinition.action.participant.role"
         },
         "modifierExtension": {
             name: "modifierExtension",
@@ -667,7 +735,7 @@ public type Shareable_PlanDefinitionGoal record {|
             max: int:MAX_VALUE,
             isArray: true,
             description: "May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).",
-            path: "PlanDefinition.goal.target.modifierExtension"
+            path: "PlanDefinition.action.participant.modifierExtension"
         },
         "id": {
             name: "id",
@@ -676,16 +744,17 @@ public type Shareable_PlanDefinitionGoal record {|
             max: 1,
             isArray: false,
             description: "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
-            path: "PlanDefinition.goal.target.id"
+            path: "PlanDefinition.action.participant.id"
         },
-        "detailPlanDefinitionRange": {
-            name: "detailPlanDefinitionRange",
-            dataType: r4:Range,
-            min: 0,
+
+        "type": {
+            name: "type",
+            dataType: ShareablePlanDefinitionActionParticipantType,
+            min: 1,
             max: 1,
             isArray: false,
-            description: "The target value of the measure to be achieved to signify fulfillment of the goal, e.g. 150 pounds or 7.0%. Either the high or low or both values of the range can be specified. When a low value is missing, it indicates that the goal is achieved at any value at or below the high value. Similarly, if the high value is missing, it indicates that the goal is achieved at any value at or above the low value.",
-            path: "PlanDefinition.goal.target.detail[x]"
+            description: "The type of participant in the action.",
+            path: "PlanDefinition.action.participant.type"
         }
     },
     serializers: {
@@ -693,41 +762,51 @@ public type Shareable_PlanDefinitionGoal record {|
         'json: r4:complexDataTypeJsonSerializer
     }
 }
-public type Shareable_PlanDefinitionGoalTarget record {|
+
+public type ShareablePlanDefinitionActionParticipant record {|
     *r4:BackboneElement;
 
-    r4:CodeableConcept detailPlanDefinitionCodeableConcept?;
     r4:Extension[] extension?;
-    r4:CodeableConcept measure?;
-    r4:Duration due?;
-    r4:Quantity detailPlanDefinitionQuantity?;
+    r4:CodeableConcept role?;
     r4:Extension[] modifierExtension?;
     string id?;
-    r4:Range detailPlanDefinitionRange?;
+    ShareablePlanDefinitionActionParticipantType 'type;
 |};
 
-# FHIR Shareable_PlanDefinitionActionRelatedAction datatype record.
+# ShareablePlanDefinitionActionParticipantType enum
+public enum ShareablePlanDefinitionActionParticipantType {
+    CODE_TYPE_RELATED_PERSON = "related-person",
+    CODE_TYPE_PRACTITIONER = "practitioner",
+    CODE_TYPE_PATIENT = "patient",
+    CODE_TYPE_DEVICE = "device"
+}
+
+# ShareablePlanDefinitionActionPriority enum
+public enum ShareablePlanDefinitionActionPriority {
+    CODE_PRIORITY_STAT = "stat",
+    CODE_PRIORITY_ROUTINE = "routine",
+    CODE_PRIORITY_URGENT = "urgent",
+    CODE_PRIORITY_ASAP = "asap"
+}
+
+# ShareablePlanDefinitionActionRequiredBehavior enum
+public enum ShareablePlanDefinitionActionRequiredBehavior {
+    CODE_REQUIREDBEHAVIOR_COULD = "could",
+    CODE_REQUIREDBEHAVIOR_MUST = "must",
+    CODE_REQUIREDBEHAVIOR_MUST_UNLESS_DOCUMENTED = "must-unless-documented"
+}
+
+# FHIR ShareablePlanDefinitionActionRelatedAction datatype record.
 #
-# + offsetPlanDefinitionRange - A duration or range of durations to apply to the relationship. For example, 30-60 minutes before.
 # + extension - May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-# + offsetPlanDefinitionDuration - A duration or range of durations to apply to the relationship. For example, 30-60 minutes before.
 # + modifierExtension - May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
 # + actionId - The element id of the related action.
 # + id - Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
 # + relationship - The relationship of this action to the related action.
 @r4:DataTypeDefinition {
-    name: "Shareable_PlanDefinitionActionRelatedAction",
+    name: "ShareablePlanDefinitionActionRelatedAction",
     baseType: (),
     elements: {
-        "offsetPlanDefinitionRange": {
-            name: "offsetPlanDefinitionRange",
-            dataType: r4:Range,
-            min: 0,
-            max: 1,
-            isArray: false,
-            description: "A duration or range of durations to apply to the relationship. For example, 30-60 minutes before.",
-            path: "PlanDefinition.action.relatedAction.offset[x]"
-        },
         "extension": {
             name: "extension",
             dataType: r4:Extension,
@@ -737,15 +816,7 @@ public type Shareable_PlanDefinitionGoalTarget record {|
             description: "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
             path: "PlanDefinition.action.relatedAction.extension"
         },
-        "offsetPlanDefinitionDuration": {
-            name: "offsetPlanDefinitionDuration",
-            dataType: r4:Duration,
-            min: 0,
-            max: 1,
-            isArray: false,
-            description: "A duration or range of durations to apply to the relationship. For example, 30-60 minutes before.",
-            path: "PlanDefinition.action.relatedAction.offset[x]"
-        },
+
         "modifierExtension": {
             name: "modifierExtension",
             dataType: r4:Extension,
@@ -775,7 +846,7 @@ public type Shareable_PlanDefinitionGoalTarget record {|
         },
         "relationship": {
             name: "relationship",
-            dataType: Shareable_PlanDefinitionActionRelatedActionRelationship,
+            dataType: ShareablePlanDefinitionActionRelatedActionRelationship,
             min: 1,
             max: 1,
             isArray: false,
@@ -788,19 +859,133 @@ public type Shareable_PlanDefinitionGoalTarget record {|
         'json: r4:complexDataTypeJsonSerializer
     }
 }
-public type Shareable_PlanDefinitionActionRelatedAction record {|
+
+public type ShareablePlanDefinitionActionRelatedAction record {|
     *r4:BackboneElement;
 
-    r4:Range offsetPlanDefinitionRange?;
     r4:Extension[] extension?;
-    r4:Duration offsetPlanDefinitionDuration?;
     r4:Extension[] modifierExtension?;
     r4:id actionId;
     string id?;
-    Shareable_PlanDefinitionActionRelatedActionRelationship relationship;
+    ShareablePlanDefinitionActionRelatedActionRelationship relationship;
 |};
 
-# FHIR Shareable_PlanDefinitionAction datatype record.
+# FHIR ShareablePlanDefinitionGoalTarget datatype record.
+#
+# + detailRange - The target value of the measure to be achieved to signify fulfillment of the goal, e.g. 150 pounds or 7.0%. Either the high or low or both values of the range can be specified. When a low value is missing, it indicates that the goal is achieved at any value at or below the high value. Similarly, if the high value is missing, it indicates that the goal is achieved at any value at or above the low value.
+# + extension - May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
+# + measure - The parameter whose value is to be tracked, e.g. body weight, blood pressure, or hemoglobin A1c level.
+# + due - Indicates the timeframe after the start of the goal in which the goal should be met.
+# + detailQuantity - The target value of the measure to be achieved to signify fulfillment of the goal, e.g. 150 pounds or 7.0%. Either the high or low or both values of the range can be specified. When a low value is missing, it indicates that the goal is achieved at any value at or below the high value. Similarly, if the high value is missing, it indicates that the goal is achieved at any value at or above the low value.
+# + modifierExtension - May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
+# + detailCodeableConcept - The target value of the measure to be achieved to signify fulfillment of the goal, e.g. 150 pounds or 7.0%. Either the high or low or both values of the range can be specified. When a low value is missing, it indicates that the goal is achieved at any value at or below the high value. Similarly, if the high value is missing, it indicates that the goal is achieved at any value at or above the low value.
+# + id - Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
+
+@r4:DataTypeDefinition {
+    name: "ShareablePlanDefinitionGoalTarget",
+    baseType: (),
+    elements: {
+        "detailRange": {
+            name: "detailRange",
+            dataType: r4:Range,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "The target value of the measure to be achieved to signify fulfillment of the goal, e.g. 150 pounds or 7.0%. Either the high or low or both values of the range can be specified. When a low value is missing, it indicates that the goal is achieved at any value at or below the high value. Similarly, if the high value is missing, it indicates that the goal is achieved at any value at or above the low value.",
+            path: "PlanDefinition.goal.target.detail[x]"
+        },
+
+        "extension": {
+            name: "extension",
+            dataType: r4:Extension,
+            min: 0,
+            max: int:MAX_VALUE,
+            isArray: true,
+            description: "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
+            path: "PlanDefinition.goal.target.extension"
+        },
+
+        "measure": {
+            name: "measure",
+            dataType: r4:CodeableConcept,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "The parameter whose value is to be tracked, e.g. body weight, blood pressure, or hemoglobin A1c level.",
+            path: "PlanDefinition.goal.target.measure"
+        },
+
+        "due": {
+            name: "due",
+            dataType: r4:Duration,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "Indicates the timeframe after the start of the goal in which the goal should be met.",
+            path: "PlanDefinition.goal.target.due"
+        },
+
+        "detailQuantity": {
+            name: "detailQuantity",
+            dataType: r4:Quantity,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "The target value of the measure to be achieved to signify fulfillment of the goal, e.g. 150 pounds or 7.0%. Either the high or low or both values of the range can be specified. When a low value is missing, it indicates that the goal is achieved at any value at or below the high value. Similarly, if the high value is missing, it indicates that the goal is achieved at any value at or above the low value.",
+            path: "PlanDefinition.goal.target.detail[x]"
+        },
+
+        "modifierExtension": {
+            name: "modifierExtension",
+            dataType: r4:Extension,
+            min: 0,
+            max: int:MAX_VALUE,
+            isArray: true,
+            description: "May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).",
+            path: "PlanDefinition.goal.target.modifierExtension"
+        },
+
+        "detailCodeableConcept": {
+            name: "detailCodeableConcept",
+            dataType: r4:CodeableConcept,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "The target value of the measure to be achieved to signify fulfillment of the goal, e.g. 150 pounds or 7.0%. Either the high or low or both values of the range can be specified. When a low value is missing, it indicates that the goal is achieved at any value at or below the high value. Similarly, if the high value is missing, it indicates that the goal is achieved at any value at or above the low value.",
+            path: "PlanDefinition.goal.target.detail[x]"
+        },
+
+        "id": {
+            name: "id",
+            dataType: string,
+            min: 0,
+            max: 1,
+            isArray: false,
+            description: "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
+            path: "PlanDefinition.goal.target.id"
+        }
+    },
+
+    serializers: {
+        'xml: r4:complexDataTypeXMLSerializer,
+        'json: r4:complexDataTypeJsonSerializer
+    }
+}
+
+public type ShareablePlanDefinitionGoalTarget record {|
+    *r4:BackboneElement;
+
+    r4:Range detailRange?;
+    r4:Extension[] extension?;
+    r4:CodeableConcept measure?;
+    r4:Duration due?;
+    r4:Quantity detailQuantity?;
+    r4:Extension[] modifierExtension?;
+    r4:CodeableConcept detailCodeableConcept?;
+    string id?;
+|};
+
+# FHIR ShareablePlanDefinitionAction datatype record.
 #
 # + reason - A description of why this action is necessary or appropriate.
 # + cardinalityBehavior - Defines whether the action can be selected multiple times.
@@ -820,6 +1005,7 @@ public type Shareable_PlanDefinitionActionRelatedAction record {|
 # + output - Defines the outputs of the action, if any.
 # + transform - A reference to a StructureMap resource that defines a transform that can be executed to produce the intent resource using the ActivityDefinition instance as the input.
 # + dynamicValue - Customizations that should be applied to the statically defined resource. For example, if the dosage of a medication must be computed based on the patient's weight, a customization would be used to specify an expression that calculated the weight, and the path on the resource that would contain the result.
+# + action - Sub actions that are contained within the action. The behavior of this action determines the functionality of the sub-actions. For example, a selection behavior of at-most-one indicates that of the sub-actions, at most one may be chosen as part of realizing the action definition.
 # + timingAge - An optional value describing when the action should be performed.
 # + id - Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
 # + relatedAction - A relationship to another action such as 'before' or '30-60 minutes after start of'.
@@ -839,7 +1025,7 @@ public type Shareable_PlanDefinitionActionRelatedAction record {|
 # + precheckBehavior - Defines whether the action should usually be preselected.
 # + timingDateTime - An optional value describing when the action should be performed.
 @r4:DataTypeDefinition {
-    name: "Shareable_PlanDefinitionAction",
+    name: "ShareablePlanDefinitionAction",
     baseType: (),
     elements: {
         "reason": {
@@ -853,7 +1039,7 @@ public type Shareable_PlanDefinitionActionRelatedAction record {|
         },
         "cardinalityBehavior": {
             name: "cardinalityBehavior",
-            dataType: Shareable_PlanDefinitionActionCardinalityBehavior,
+            dataType: ShareablePlanDefinitionActionCardinalityBehavior,
             min: 0,
             max: 1,
             isArray: false,
@@ -961,7 +1147,7 @@ public type Shareable_PlanDefinitionActionRelatedAction record {|
         },
         "groupingBehavior": {
             name: "groupingBehavior",
-            dataType: Shareable_PlanDefinitionActionGroupingBehavior,
+            dataType: ShareablePlanDefinitionActionGroupingBehavior,
             min: 0,
             max: 1,
             isArray: false,
@@ -970,7 +1156,7 @@ public type Shareable_PlanDefinitionActionRelatedAction record {|
         },
         "participant": {
             name: "participant",
-            dataType: Shareable_PlanDefinitionActionParticipant,
+            dataType: ShareablePlanDefinitionActionParticipant,
             min: 0,
             max: int:MAX_VALUE,
             isArray: true,
@@ -997,13 +1183,24 @@ public type Shareable_PlanDefinitionActionRelatedAction record {|
         },
         "dynamicValue": {
             name: "dynamicValue",
-            dataType: Shareable_PlanDefinitionActionDynamicValue,
+            dataType: ShareablePlanDefinitionActionDynamicValue,
             min: 0,
             max: int:MAX_VALUE,
             isArray: true,
             description: "Customizations that should be applied to the statically defined resource. For example, if the dosage of a medication must be computed based on the patient's weight, a customization would be used to specify an expression that calculated the weight, and the path on the resource that would contain the result.",
             path: "PlanDefinition.action.dynamicValue"
         },
+
+        "action": {
+            name: "action",
+            dataType: ShareablePlanDefinitionAction,
+            min: 0,
+            max: int:MAX_VALUE,
+            isArray: true,
+            description: "Sub actions that are contained within the action. The behavior of this action determines the functionality of the sub-actions. For example, a selection behavior of at-most-one indicates that of the sub-actions, at most one may be chosen as part of realizing the action definition.",
+            path: "PlanDefinition.action.action"
+        },
+
         "timingAge": {
             name: "timingAge",
             dataType: r4:Age,
@@ -1024,7 +1221,7 @@ public type Shareable_PlanDefinitionActionRelatedAction record {|
         },
         "relatedAction": {
             name: "relatedAction",
-            dataType: Shareable_PlanDefinitionActionRelatedAction,
+            dataType: ShareablePlanDefinitionActionRelatedAction,
             min: 0,
             max: int:MAX_VALUE,
             isArray: true,
@@ -1087,7 +1284,7 @@ public type Shareable_PlanDefinitionActionRelatedAction record {|
         },
         "priority": {
             name: "priority",
-            dataType: Shareable_PlanDefinitionActionPriority,
+            dataType: ShareablePlanDefinitionActionPriority,
             min: 0,
             max: 1,
             isArray: false,
@@ -1114,7 +1311,7 @@ public type Shareable_PlanDefinitionActionRelatedAction record {|
         },
         "requiredBehavior": {
             name: "requiredBehavior",
-            dataType: Shareable_PlanDefinitionActionRequiredBehavior,
+            dataType: ShareablePlanDefinitionActionRequiredBehavior,
             min: 0,
             max: 1,
             isArray: false,
@@ -1123,7 +1320,7 @@ public type Shareable_PlanDefinitionActionRelatedAction record {|
         },
         "condition": {
             name: "condition",
-            dataType: Shareable_PlanDefinitionActionCondition,
+            dataType: ShareablePlanDefinitionActionCondition,
             min: 0,
             max: int:MAX_VALUE,
             isArray: true,
@@ -1132,7 +1329,7 @@ public type Shareable_PlanDefinitionActionRelatedAction record {|
         },
         "selectionBehavior": {
             name: "selectionBehavior",
-            dataType: Shareable_PlanDefinitionActionSelectionBehavior,
+            dataType: ShareablePlanDefinitionActionSelectionBehavior,
             min: 0,
             max: 1,
             isArray: false,
@@ -1150,7 +1347,7 @@ public type Shareable_PlanDefinitionActionRelatedAction record {|
         },
         "precheckBehavior": {
             name: "precheckBehavior",
-            dataType: Shareable_PlanDefinitionActionPrecheckBehavior,
+            dataType: ShareablePlanDefinitionActionPrecheckBehavior,
             min: 0,
             max: 1,
             isArray: false,
@@ -1172,11 +1369,12 @@ public type Shareable_PlanDefinitionActionRelatedAction record {|
         'json: r4:complexDataTypeJsonSerializer
     }
 }
-public type Shareable_PlanDefinitionAction record {|
+
+public type ShareablePlanDefinitionAction record {|
     *r4:BackboneElement;
 
     r4:CodeableConcept[] reason?;
-    Shareable_PlanDefinitionActionCardinalityBehavior cardinalityBehavior?;
+    ShareablePlanDefinitionActionCardinalityBehavior cardinalityBehavior?;
     r4:canonical definitionCanonical?;
     r4:Extension[] extension?;
     r4:CodeableConcept[] code?;
@@ -1188,233 +1386,40 @@ public type Shareable_PlanDefinitionAction record {|
     r4:uri definitionUri?;
     string title?;
     r4:CodeableConcept 'type?;
-    Shareable_PlanDefinitionActionGroupingBehavior groupingBehavior?;
-    Shareable_PlanDefinitionActionParticipant[] participant?;
+    ShareablePlanDefinitionActionGroupingBehavior groupingBehavior?;
+    ShareablePlanDefinitionActionParticipant[] participant?;
     r4:DataRequirement[] output?;
     r4:canonical transform?;
-    Shareable_PlanDefinitionActionDynamicValue[] dynamicValue?;
+    ShareablePlanDefinitionActionDynamicValue[] dynamicValue?;
+    ShareablePlanDefinitionAction[] action?;
     r4:Age timingAge?;
     string id?;
-    Shareable_PlanDefinitionActionRelatedAction[] relatedAction?;
+    ShareablePlanDefinitionActionRelatedAction[] relatedAction?;
     r4:Duration timingDuration?;
     string textEquivalent?;
     r4:Timing timingTiming?;
     r4:Period timingPeriod?;
     r4:RelatedArtifact[] documentation?;
     r4:TriggerDefinition[] trigger?;
-    Shareable_PlanDefinitionActionPriority priority?;
+    ShareablePlanDefinitionActionPriority priority?;
     r4:Reference subjectReference?;
     r4:DataRequirement[] input?;
-    Shareable_PlanDefinitionActionRequiredBehavior requiredBehavior?;
-    Shareable_PlanDefinitionActionCondition[] condition?;
-    Shareable_PlanDefinitionActionSelectionBehavior selectionBehavior?;
+    ShareablePlanDefinitionActionRequiredBehavior requiredBehavior?;
+    ShareablePlanDefinitionActionCondition[] condition?;
+    ShareablePlanDefinitionActionSelectionBehavior selectionBehavior?;
     r4:Range timingRange?;
-    Shareable_PlanDefinitionActionPrecheckBehavior precheckBehavior?;
+    ShareablePlanDefinitionActionPrecheckBehavior precheckBehavior?;
     r4:dateTime timingDateTime?;
 |};
 
-# Shareable_PlanDefinitionActionRequiredBehavior enum
-public enum Shareable_PlanDefinitionActionRequiredBehavior {
-   CODE_REQUIREDBEHAVIOR_COULD = "could",
-   CODE_REQUIREDBEHAVIOR_MUST = "must",
-   CODE_REQUIREDBEHAVIOR_MUST_UNLESS_DOCUMENTED = "must-unless-documented"
+# ShareablePlanDefinitionActionConditionKind enum
+public enum ShareablePlanDefinitionActionConditionKind {
+    CODE_KIND_STOP = "stop",
+    CODE_KIND_START = "start",
+    CODE_KIND_APPLICABILITY = "applicability"
 }
 
-# Shareable_PlanDefinitionActionPriority enum
-public enum Shareable_PlanDefinitionActionPriority {
-   CODE_PRIORITY_STAT = "stat",
-   CODE_PRIORITY_ROUTINE = "routine",
-   CODE_PRIORITY_URGENT = "urgent",
-   CODE_PRIORITY_ASAP = "asap"
-}
-
-# FHIR Shareable_PlanDefinitionActionParticipant datatype record.
-#
-# + extension - May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-# + role - The role the participant should play in performing the described action.
-# + modifierExtension - May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-# + id - Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-# + 'type - The type of participant in the action.
-@r4:DataTypeDefinition {
-    name: "Shareable_PlanDefinitionActionParticipant",
-    baseType: (),
-    elements: {
-        "extension": {
-            name: "extension",
-            dataType: r4:Extension,
-            min: 0,
-            max: int:MAX_VALUE,
-            isArray: true,
-            description: "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
-            path: "PlanDefinition.action.participant.extension"
-        },
-        "role": {
-            name: "role",
-            dataType: r4:CodeableConcept,
-            min: 0,
-            max: 1,
-            isArray: false,
-            description: "The role the participant should play in performing the described action.",
-            path: "PlanDefinition.action.participant.role"
-        },
-        "modifierExtension": {
-            name: "modifierExtension",
-            dataType: r4:Extension,
-            min: 0,
-            max: int:MAX_VALUE,
-            isArray: true,
-            description: "May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).",
-            path: "PlanDefinition.action.participant.modifierExtension"
-        },
-        "id": {
-            name: "id",
-            dataType: string,
-            min: 0,
-            max: 1,
-            isArray: false,
-            description: "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
-            path: "PlanDefinition.action.participant.id"
-        },
-        "type": {
-            name: "type",
-            dataType: Shareable_PlanDefinitionActionParticipantType,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "The type of participant in the action.",
-            path: "PlanDefinition.action.participant.type"
-        }
-    },
-    serializers: {
-        'xml: r4:complexDataTypeXMLSerializer,
-        'json: r4:complexDataTypeJsonSerializer
-    }
-}
-public type Shareable_PlanDefinitionActionParticipant record {|
-    *r4:BackboneElement;
-
-    r4:Extension[] extension?;
-    r4:CodeableConcept role?;
-    r4:Extension[] modifierExtension?;
-    string id?;
-    Shareable_PlanDefinitionActionParticipantType 'type;
-|};
-
-# Shareable_PlanDefinitionActionPrecheckBehavior enum
-public enum Shareable_PlanDefinitionActionPrecheckBehavior {
-   CODE_PRECHECKBEHAVIOR_NO = "no",
-   CODE_PRECHECKBEHAVIOR_YES = "yes"
-}
-
-# Shareable_PlanDefinitionActionSelectionBehavior enum
-public enum Shareable_PlanDefinitionActionSelectionBehavior {
-   CODE_SELECTIONBEHAVIOR_ALL = "all",
-   CODE_SELECTIONBEHAVIOR_EXACTLY_ONE = "exactly-one",
-   CODE_SELECTIONBEHAVIOR_AT_MOST_ONE = "at-most-one",
-   CODE_SELECTIONBEHAVIOR_ALL_OR_NONE = "all-or-none",
-   CODE_SELECTIONBEHAVIOR_ANY = "any",
-   CODE_SELECTIONBEHAVIOR_ONE_OR_MORE = "one-or-more"
-}
-
-# FHIR Shareable_PlanDefinitionActionCondition datatype record.
-#
-# + extension - May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
-# + expression - An expression that returns true or false, indicating whether the condition is satisfied.
-# + kind - The kind of condition.
-# + modifierExtension - May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
-# + id - Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
-@r4:DataTypeDefinition {
-    name: "Shareable_PlanDefinitionActionCondition",
-    baseType: (),
-    elements: {
-        "extension": {
-            name: "extension",
-            dataType: r4:Extension,
-            min: 0,
-            max: int:MAX_VALUE,
-            isArray: true,
-            description: "May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.",
-            path: "PlanDefinition.action.condition.extension"
-        },
-        "expression": {
-            name: "expression",
-            dataType: r4:Expression,
-            min: 0,
-            max: 1,
-            isArray: false,
-            description: "An expression that returns true or false, indicating whether the condition is satisfied.",
-            path: "PlanDefinition.action.condition.expression"
-        },
-        "kind": {
-            name: "kind",
-            dataType: Shareable_PlanDefinitionActionConditionKind,
-            min: 1,
-            max: 1,
-            isArray: false,
-            description: "The kind of condition.",
-            path: "PlanDefinition.action.condition.kind"
-        },
-        "modifierExtension": {
-            name: "modifierExtension",
-            dataType: r4:Extension,
-            min: 0,
-            max: int:MAX_VALUE,
-            isArray: true,
-            description: "May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).",
-            path: "PlanDefinition.action.condition.modifierExtension"
-        },
-        "id": {
-            name: "id",
-            dataType: string,
-            min: 0,
-            max: 1,
-            isArray: false,
-            description: "Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.",
-            path: "PlanDefinition.action.condition.id"
-        }
-    },
-    serializers: {
-        'xml: r4:complexDataTypeXMLSerializer,
-        'json: r4:complexDataTypeJsonSerializer
-    }
-}
-public type Shareable_PlanDefinitionActionCondition record {|
-    *r4:BackboneElement;
-
-    r4:Extension[] extension?;
-    r4:Expression expression?;
-    Shareable_PlanDefinitionActionConditionKind kind;
-    r4:Extension[] modifierExtension?;
-    string id?;
-|};
-
-# Shareable_PlanDefinitionActionGroupingBehavior enum
-public enum Shareable_PlanDefinitionActionGroupingBehavior {
-   CODE_GROUPINGBEHAVIOR_VISUAL_GROUP = "visual-group",
-   CODE_GROUPINGBEHAVIOR_SENTENCE_GROUP = "sentence-group",
-   CODE_GROUPINGBEHAVIOR_LOGICAL_GROUP = "logical-group"
-}
-
-# Shareable_PlanDefinitionActionRelatedActionRelationship enum
-public enum Shareable_PlanDefinitionActionRelatedActionRelationship {
-   CODE_RELATIONSHIP_AFTER_END = "after-end",
-   CODE_RELATIONSHIP_BEFORE = "before",
-   CODE_RELATIONSHIP_CONCURRENT_WITH_START = "concurrent-with-start",
-   CODE_RELATIONSHIP_CONCURRENT = "concurrent",
-   CODE_RELATIONSHIP_BEFORE_END = "before-end",
-   CODE_RELATIONSHIP_AFTER = "after",
-   CODE_RELATIONSHIP_CONCURRENT_WITH_END = "concurrent-with-end",
-   CODE_RELATIONSHIP_AFTER_START = "after-start",
-   CODE_RELATIONSHIP_BEFORE_START = "before-start"
-}
-
-# Shareable_PlanDefinitionActionCardinalityBehavior enum
-public enum Shareable_PlanDefinitionActionCardinalityBehavior {
-   CODE_CARDINALITYBEHAVIOR_SINGLE = "single",
-   CODE_CARDINALITYBEHAVIOR_MULTIPLE = "multiple"
-}
-
-# FHIR Shareable_PlanDefinitionActionDynamicValue datatype record.
+# FHIR ShareablePlanDefinitionActionDynamicValue datatype record.
 #
 # + path - The path to the element to be customized. This is the path on the resource that will hold the result of the calculation defined by the expression. The specified path SHALL be a FHIRPath resolveable on the specified target type of the ActivityDefinition, and SHALL consist only of identifiers, constant indexers, and a restricted subset of functions. The path is allowed to contain qualifiers (.) to traverse sub-elements, as well as indexers ([x]) to traverse multiple-cardinality sub-elements (see the [Simple FHIRPath Profile](http://hl7.org/fhir/fhirpath.html#simple) for full details).
 # + extension - May be used to represent additional information that is not part of the basic definition of the element. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension.
@@ -1422,7 +1427,7 @@ public enum Shareable_PlanDefinitionActionCardinalityBehavior {
 # + modifierExtension - May be used to represent additional information that is not part of the basic definition of the element and that modifies the understanding of the element in which it is contained and/or the understanding of the containing element's descendants. Usually modifier elements provide negation or qualification. To make the use of extensions safe and manageable, there is a strict set of governance applied to the definition and use of extensions. Though any implementer can define an extension, there is a set of requirements that SHALL be met as part of the definition of the extension. Applications processing a resource are required to check for modifier extensions. Modifier extensions SHALL NOT change the meaning of any elements on Resource or DomainResource (including cannot change the meaning of modifierExtension itself).
 # + id - Unique id for the element within a resource (for internal references). This may be any string value that does not contain spaces.
 @r4:DataTypeDefinition {
-    name: "Shareable_PlanDefinitionActionDynamicValue",
+    name: "ShareablePlanDefinitionActionDynamicValue",
     baseType: (),
     elements: {
         "path": {
@@ -1476,7 +1481,8 @@ public enum Shareable_PlanDefinitionActionCardinalityBehavior {
         'json: r4:complexDataTypeJsonSerializer
     }
 }
-public type Shareable_PlanDefinitionActionDynamicValue record {|
+
+public type ShareablePlanDefinitionActionDynamicValue record {|
     *r4:BackboneElement;
 
     string path?;
@@ -1485,4 +1491,18 @@ public type Shareable_PlanDefinitionActionDynamicValue record {|
     r4:Extension[] modifierExtension?;
     string id?;
 |};
+
+# ShareablePlanDefinitionActionPrecheckBehavior enum
+public enum ShareablePlanDefinitionActionPrecheckBehavior {
+    CODE_PRECHECKBEHAVIOR_NO = "no",
+    CODE_PRECHECKBEHAVIOR_YES = "yes"
+}
+
+# ShareablePlanDefinitionStatus enum
+public enum ShareablePlanDefinitionStatus {
+    CODE_STATUS_DRAFT = "draft",
+    CODE_STATUS_ACTIVE = "active",
+    CODE_STATUS_RETIRED = "retired",
+    CODE_STATUS_UNKNOWN = "unknown"
+}
 

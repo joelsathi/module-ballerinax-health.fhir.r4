@@ -23,7 +23,7 @@
     <parent>
         <artifactId>fhirr4</artifactId>
         <groupId>io.ballerinax</groupId>
-        <version>1.2.5</version>
+        <version>3.0.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -31,8 +31,8 @@
     <artifactId>fhirr4-ballerina</artifactId>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
 
     <build>
@@ -117,6 +117,8 @@
                             <executable>bal</executable>
                             <arguments>
                                 <argument>pack</argument>
+                                <!-- Todo: Remove this after the issue https://github.com/wso2-enterprise/wso2-integration-internal/issues/4657 is fixed. -->
+                                <argument>--sticky</argument>
                                 <argument>${project.build.outputDirectory}/fhirservice</argument>
                             </arguments>
                         </configuration>
@@ -148,6 +150,8 @@
                                     <executable>bal</executable>
                                     <arguments>
                                         <argument>test</argument>
+                                        <!--                                        <argument>&#45;&#45;test-report</argument>-->
+                                        <!--                                        <argument>&#45;&#45;code-coverage</argument>-->
                                         <argument>${project.build.outputDirectory}/fhirservice</argument>
                                     </arguments>
                                 </configuration>

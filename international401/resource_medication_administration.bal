@@ -1,4 +1,4 @@
-// Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
 
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -21,6 +21,8 @@ import ballerinax/health.fhir.r4;
 
 public const string PROFILE_BASE_MEDICATIONADMINISTRATION = "http://hl7.org/fhir/StructureDefinition/MedicationAdministration";
 public const RESOURCE_NAME_MEDICATIONADMINISTRATION = "MedicationAdministration";
+
+public type MedicationAdministrationExtensions (EventLocation|r4:Extension|WorkflowEpisodeOfCare|WorkflowReleaseDate|WorkflowResearchStudy);
 
 # FHIR MedicationAdministration resource record.
 #
@@ -143,7 +145,7 @@ public const RESOURCE_NAME_MEDICATIONADMINISTRATION = "MedicationAdministration"
         "medicationReference" : {
             name: "medicationReference",
             dataType: r4:Reference,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             path: "MedicationAdministration.medication[x]",
@@ -210,7 +212,7 @@ public const RESOURCE_NAME_MEDICATIONADMINISTRATION = "MedicationAdministration"
         "effectivePeriod" : {
             name: "effectivePeriod",
             dataType: r4:Period,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             path: "MedicationAdministration.effective[x]"
@@ -226,7 +228,7 @@ public const RESOURCE_NAME_MEDICATIONADMINISTRATION = "MedicationAdministration"
         "medicationCodeableConcept" : {
             name: "medicationCodeableConcept",
             dataType: r4:CodeableConcept,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             path: "MedicationAdministration.medication[x]",
@@ -243,7 +245,7 @@ public const RESOURCE_NAME_MEDICATIONADMINISTRATION = "MedicationAdministration"
         "effectiveDateTime" : {
             name: "effectiveDateTime",
             dataType: r4:dateTime,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             path: "MedicationAdministration.effective[x]"
@@ -319,7 +321,7 @@ public type MedicationAdministration record {|
     r4:Extension[] modifierExtension?;
     r4:Reference[] reasonReference?;
     r4:code language?;
-    r4:Reference medicationReference;
+    r4:Reference medicationReference?;
     r4:CodeableConcept[] statusReason?;
     r4:Reference context?;
     string id?;
@@ -327,11 +329,11 @@ public type MedicationAdministration record {|
     r4:Narrative text?;
     r4:Identifier[] identifier?;
     MedicationAdministrationPerformer[] performer?;
-    r4:Period effectivePeriod;
+    r4:Period effectivePeriod?;
     r4:Reference[] supportingInformation?;
-    r4:CodeableConcept medicationCodeableConcept;
+    r4:CodeableConcept medicationCodeableConcept?;
     r4:Resource[] contained?;
-    r4:dateTime effectiveDateTime;
+    r4:dateTime effectiveDateTime?;
     r4:Meta meta?;
     r4:Reference[] eventHistory?;
     r4:uri implicitRules?;

@@ -12,6 +12,9 @@ on:
         - PROD
         required: true
 
+env:
+  BALLERINA_VERSION: 2201.12.2
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -23,13 +26,13 @@ jobs:
       - name: Setup Java and Maven
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
 
       - name: Setup latest Ballerina version
         uses: ballerina-platform/setup-ballerina@v1.1.0
         with:
-          version: 2201.8.1
+          version: $BALLERINA_VERSION
       
       - name: Print ballerina version
         run: bal version
@@ -44,10 +47,27 @@ jobs:
                 </server>
               </servers>
             </settings>' > ~/.m2/settings.xml
-
-      - name: Run maven build
+          
+      - name: Run maven build for staging
+        if: inputs.bal_central_environment == 'STAGE'
+        env:
+          BALLERINA_STAGE_CENTRAL: true
+          BALLERINA_CENTRAL_ACCESS_TOKEN: ${{ secrets.BALLERINA_CENTRAL_STAGE_ACCESS_TOKEN }}
         run: |
-         mvn clean install -f fhirr4
+          mvn clean install -f fhirr4
+
+      - name: Run maven build for dev
+        if: inputs.bal_central_environment == 'DEV'
+        env:
+          BALLERINA_DEV_CENTRAL: true
+          BALLERINA_CENTRAL_ACCESS_TOKEN: ${{ secrets.BALLERINA_CENTRAL_DEV_ACCESS_TOKEN }}
+        run: |
+          mvn clean install -f fhirr4
+
+      - name: Run maven build for prod
+        if: inputs.bal_central_environment == 'PROD'
+        run: |
+          mvn clean install -f fhirr4
 
       - name: Push to Staging
         if: inputs.bal_central_environment == 'STAGE'

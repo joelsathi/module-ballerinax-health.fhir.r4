@@ -1,4 +1,4 @@
-// Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
 
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -21,6 +21,8 @@ import ballerinax/health.fhir.r4;
 
 public const string PROFILE_BASE_COMMUNICATIONREQUEST = "http://hl7.org/fhir/StructureDefinition/CommunicationRequest";
 public const RESOURCE_NAME_COMMUNICATIONREQUEST = "CommunicationRequest";
+
+public type CommunicationRequestExtensions (CommunicationrequestInitiatingLocation|r4:Extension|RequestRelevantHistory|WorkflowBarrier|WorkflowCompliesWith|WorkflowEpisodeOfCare|WorkflowGeneratedFrom|WorkflowInstantiatesCanonical|WorkflowInstantiatesUri|WorkflowProtectiveFactor|WorkflowReleaseDate|WorkflowShallComplyWith|WorkflowSupportingInfo|WorkflowTriggeredBy);
 
 # FHIR CommunicationRequest resource record.
 #
@@ -403,7 +405,7 @@ public enum CommunicationRequestPriority {
         "contentReference": {
             name: "contentReference",
             dataType: r4:Reference,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The communicated content (or for multi-part communications, one portion of the communication).",
@@ -412,7 +414,7 @@ public enum CommunicationRequestPriority {
         "contentString": {
             name: "contentString",
             dataType: string,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The communicated content (or for multi-part communications, one portion of the communication).",
@@ -430,7 +432,7 @@ public enum CommunicationRequestPriority {
         "contentAttachment": {
             name: "contentAttachment",
             dataType: r4:Attachment,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The communicated content (or for multi-part communications, one portion of the communication).",
@@ -455,10 +457,10 @@ public type CommunicationRequestPayload record {|
     *r4:BackboneElement;
 
     r4:Extension[] extension?;
-    r4:Reference contentReference;
-    string contentString;
+    r4:Reference contentReference?;
+    string contentString?;
     r4:Extension[] modifierExtension?;
-    r4:Attachment contentAttachment;
+    r4:Attachment contentAttachment?;
     string id?;
 |};
 

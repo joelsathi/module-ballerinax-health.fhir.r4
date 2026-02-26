@@ -1,4 +1,4 @@
-// Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
+// Copyright (c) 2025, WSO2 LLC. (http://www.wso2.com).
 
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
@@ -231,7 +231,7 @@ public enum MedicationStatus {
         "itemReference": {
             name: "itemReference",
             dataType: r4:Reference,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The actual ingredient - either a substance (simple ingredient) or another medication of a medication.",
@@ -258,7 +258,7 @@ public enum MedicationStatus {
         "itemCodeableConcept": {
             name: "itemCodeableConcept",
             dataType: r4:CodeableConcept,
-            min: 1,
+            min: 0,
             max: 1,
             isArray: false,
             description: "The actual ingredient - either a substance (simple ingredient) or another medication of a medication.",
@@ -300,10 +300,10 @@ public enum MedicationStatus {
 public type MedicationIngredient record {|
     *r4:BackboneElement;
 
-    r4:Reference itemReference;
+    r4:Reference itemReference?;
     r4:Extension[] extension?;
     r4:Ratio strength?;
-    r4:CodeableConcept itemCodeableConcept;
+    r4:CodeableConcept itemCodeableConcept?;
     r4:Extension[] modifierExtension?;
     string id?;
     boolean isActive?;

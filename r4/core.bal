@@ -1,12 +1,9 @@
 // Copyright (c) 2023, WSO2 LLC. (http://www.wso2.com).
-
 // WSO2 LLC. licenses this file to you under the Apache License,
 // Version 2.0 (the "License"); you may not use this file except
 // in compliance with the License.
 // You may obtain a copy of the License at
-
 // http://www.apache.org/licenses/LICENSE-2.0
-
 // Unless required by applicable law or agreed to in writing,
 // software distributed under the License is distributed on an
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -14,8 +11,8 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/time;
 import ballerina/jwt;
+import ballerina/time;
 import ballerinax/health.base.message;
 
 # FHIR wire content type formats
@@ -41,7 +38,8 @@ public enum FHIRInteractionType {
     SEARCH,
     CAPABILITIES,
     BATCH,
-    TRANSACTION
+    TRANSACTION,
+    OPERATION
 }
 
 # Enum to indicate message flow direction
@@ -127,17 +125,50 @@ public type FHIRSearchParameterDefinition record {
     string? expression;
 };
 
-# Operation definition representing summary information reqiored for processing from spec.
+# Usage of parameters in an operation.
+public enum OperationParameterUse {
+    INPUT = "in",
+    OUTPUT = "out"
+};
+
+# Operation search param definition representing summary parameter information required for processing from spec.
+#
+# + name - name of the operation parameter
+# + use - whether the operation parameter is an input or an output parameter
+# + min - minimum cardinality
+# + max - maximum cardinality
+# + documentation - description of the operation parameter 
+# + 'type - type of the operation parameter 
+# + searchType - search type of the operation parameter
+# + part - parts of the operation parameter
+public type FHIROperationParameterDefinition record {
+    string name;
+    OperationParameterUse use;
+    int min;
+    string max;
+    string documentation?;
+    string 'type?;
+    FHIRSearchParameterType searchType?;
+    FHIROperationParameterDefinition[] part?;
+};
+
+# Operation definition representing summary information required for processing from spec.
 #
 # + name - name of the operation
 # + instanceLevel - active in instance interaction level
 # + typeLevel - active in type interaction level
 # + systemLevel - active in system interaction level
+# + affectsState - whether the operation affects the state of the server
+# + 'resource - resource types on which the operation applies
+# + 'parameter - parameters of the operation
 public type FHIROperationDefinition record {|
     string name;
     boolean instanceLevel;
     boolean typeLevel;
     boolean systemLevel;
+    boolean affectsState?;
+    string[] 'resource?;
+    FHIROperationParameterDefinition[] 'parameter?;
 |};
 
 # Record type that holds original incoming values and processed information about the request search parameter.
@@ -270,6 +301,7 @@ public isolated class FHIRResourceEntity {
             return self.resourceRecord.clone();
         }
     }
+
     public isolated function toXml() returns xml|FHIRSerializerError {
         lock {
             return executeResourceXMLSerializer(self.resourceRecord.clone());
@@ -321,6 +353,15 @@ public type HTTPRequest record {
     readonly & (json|xml|string)? payload;
 };
 
+# Record collecting information about the HTTP response.
+#
+# + headers - map of outgoing HTTP headers
+# + statusCode - HTTP status code
+public type HTTPResponse record {
+    map<string> headers;
+    int? statusCode;
+};
+
 # Class representing FHIR request
 public isolated class FHIRRequest {
     private final FHIRResourceEntity? resourceEntity;
@@ -331,7 +372,6 @@ public isolated class FHIRRequest {
     private final readonly & FHIRInteraction interaction;
 
     private final readonly & map<readonly & RequestSearchParameter[]> searchParameters;
-    // TODO FHIR Operations also should go here
     private final FHIRPayloadFormat clientAcceptFormat;
 
     public isolated function init(readonly & FHIRInteraction interaction,
@@ -416,6 +456,17 @@ public type FHIRUpdateInteraction record {
     string id;
 };
 
+# FHIR Operation interaction.
+#
+# + interaction - Interaction type
+# + operation - Operation name
+public type FHIROperationInteraction record {
+    *FHIRInteraction;
+
+    OPERATION interaction = OPERATION;
+    string operation;
+};
+
 # Class representing FHIR response
 public isolated class FHIRResponse {
     private final FHIRResourceEntity resourceEntity;
@@ -472,3 +523,36 @@ public type JWT record {
     readonly & jwt:Header header;
     readonly & jwt:Payload payload;
 };
+
+# Record to hold pagination related info in fhir context.
+#
+# + paginationEnabled - Whether pagination is enabled or not  
+# + page - Page number 
+# + pageSize - Page size
+public type PaginationContext record {|
+    readonly boolean paginationEnabled;
+    readonly int page;
+    readonly int pageSize;
+|};
+
+# Record to hold consent context information.
+#
+# + patientID - Unique identifier of the patient for which the consent is given.
+# + consentedResourceTypes - List of resource types that the user has consented to access
+public type ConsentContext record {|
+    readonly string patientID;
+    readonly string[] consentedResourceTypes;
+|};
+
+# Record to hold FHIR service information.
+#
+# + name - The name of the service  
+# + serviceUrl - The service URL  
+# + status - Service status (active, inactive)  
+# + apiConfig - API configuration details
+public type FHIRServiceInfo record {|
+    string name;
+    string serviceUrl;
+    string status = "active";
+    ResourceAPIConfig apiConfig?;
+|};
